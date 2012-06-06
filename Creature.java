@@ -20,8 +20,13 @@ public abstract class Creature {
 	
 	public abstract void process();
 	public abstract int getMaxAge();
+	public abstract float[] getColor();
 	
 	public boolean isAlive() {
 		return true;
+	}
+	
+	public Position getPosition() {
+		return this.pos;
 	}
 }

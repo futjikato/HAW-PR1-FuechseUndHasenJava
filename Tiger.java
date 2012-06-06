@@ -14,4 +14,9 @@ public class Tiger extends Creature {
 	public int getMaxAge() {
 		return 20;
 	}
+	
+	public float[] getColor() {
+		float[] rgba = { 0.5f , 0.5f , 1.0f };
+		return rgba;
+	}
 }

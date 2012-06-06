@@ -17,6 +17,10 @@ public class Simulator {
 		this.creatures.push(createure);
 	}
 	
+	public Stack<Creature> getCreatures() {
+		return this.creatures;
+	}
+	
 	public void run(int steps) {
 		// iterate over all creatures in stack
 		Stack<Creature> oldstack = this.creatures;
