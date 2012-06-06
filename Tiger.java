@@ -7,6 +7,13 @@ public class Tiger extends Creature {
 		
 		// get random free neighbor field
 		Position[] neighbor = this.field.getNeighborPositions(this.pos);
+		
+		// if now free field is available the tiger dies :(
+		if(neighbor.length <= 0) {
+			this.alive = false;
+			return;
+		}
+		
 		Position free;
 		do {
 			free = neighbor[(int)(Math.random()*neighbor.length)];

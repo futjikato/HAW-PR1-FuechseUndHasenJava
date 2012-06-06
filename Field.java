@@ -75,12 +75,12 @@ public class Field {
 	
 	public Position[] getNeighborPositions(Position pos) {
 		Stack<Position> retVal = new Stack<Position>();
-		for(int i = -1 ; i < 1 ; i++) {
+		for(int i = -1 ; i <= 1 ; i++) {
 			int newX = pos.getX() + i;
-			if(newX > this.size || newX < 0) continue;
-			for(int j = -1 ; j < 1 ; j++) {
+			if(newX >= this.size || newX < 0) continue;
+			for(int j = -1 ; j <= 1 ; j++) {
 				int newY = pos.getY() + j;
-				if(newY > this.size || newY < 0 || (i == 0 && j == 0)) continue;
+				if(newY >= this.size || newY < 0 || (i == 0 && j == 0)) continue;
 				Position testpos = new Position(newX,newY);
 				retVal.push(testpos);
 			}

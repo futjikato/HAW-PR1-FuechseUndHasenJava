@@ -23,7 +23,7 @@ public abstract class Creature {
 	public abstract float[] getColor();
 	
 	public boolean isAlive() {
-		return true;
+		return this.alive;
 	}
 	
 	public Position getPosition() {

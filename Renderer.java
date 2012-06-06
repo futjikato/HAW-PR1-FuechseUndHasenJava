@@ -21,6 +21,7 @@ public class Renderer {
 	public void init() {
 		try {
 			Display.setDisplayMode(new DisplayMode(this.width,this.height));
+			Display.setTitle("FŸchse und Hasen - Java");
 			Display.create();
 		} catch (LWJGLException e) {
 			// TODO Auto-generated catch block
