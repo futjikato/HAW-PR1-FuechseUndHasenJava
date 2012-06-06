@@ -10,25 +10,12 @@ public class Renderer {
 	protected Field field;
 	protected Simulator simulator;
 
-	public Renderer(int width, int height) {
+	public Renderer(Field field, int width, int height) {
 		this.width = width;
 		this.height = height;
-	}
-	
-	public Field getField() {
-		return field;
-	}
-
-	public void setField(Field field) {
 		this.field = field;
-	}
-	
-	public Simulator getSimulator() {
-		return simulator;
-	}
-
-	public void setSimulator(Simulator simulator) {
-		this.simulator = simulator;
+		
+		this.init();
 	}
 	
 	public void init() {
@@ -70,20 +57,19 @@ public class Renderer {
 		GL11.glEnd();
 	}
 	
-	public void drawField() {
-		Stack<Creature> creatures = this.simulator.getCreatures();
+	public void drawCreatures(Stack<Creature> creatures) {
 		while(!creatures.empty()) {
 			Creature currCreature = creatures.pop();
 			this.drawCreature(currCreature);
 		}
 	}
 	
-	public void render() {
+	public void render(Stack<Creature> creatures) {
 		// Clear the screen and depth buffer
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	
 		
 		// draw everything on the field
-		this.drawField();
+		this.drawCreatures(creatures);
 		
 		// update screen
 		Display.update();

@@ -9,8 +9,11 @@ public class Simulator {
 	
 	protected Field battlefield;
 	
-	public Simulator(Field battlefield){
+	protected Renderer renderer;
+	
+	public Simulator(Field battlefield, Renderer renderer){
 		this.battlefield = battlefield;
+		this.renderer = renderer;
 	}
 	
 	public void addCreature(Creature createure) {
@@ -37,6 +40,8 @@ public class Simulator {
 			
 			this.creatures = newstack;
 		}
+		
+		this.renderer.render(this.creatures);
 	}
 	
 	public boolean populate(String baseClass, int number) {
