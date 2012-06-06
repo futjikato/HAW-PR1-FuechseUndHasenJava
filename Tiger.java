@@ -2,9 +2,19 @@ public class Tiger extends Creature {
 	public Tiger(Field field, boolean randAge, Position pos) {
 		super(field, randAge, pos);
 	}
-
+	
 	public void process() {
-		System.out.println(this);
+		
+		// get random free neighbor field
+		Position[] neighbor = this.field.getNeighborPositions(this.pos);
+		Position free;
+		do {
+			free = neighbor[(int)(Math.random()*neighbor.length)];
+		} while(!this.field.isFieldFree(free));
+		
+		// move creature
+		this.field.moveCreature(this, free);
+		this.pos = free;
 	}
 	
 	public String toString() {

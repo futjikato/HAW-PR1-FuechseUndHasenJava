@@ -15,7 +15,9 @@ public class App {
 		
 		// add 10 tigers to the field
 		simulat.populate("Tiger", 10);
-		simulat.run(1);
+		simulat.run(10);
+		
+		System.out.println("Done !");
 	}
 
 }

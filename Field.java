@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 
 public class Field {
 	
@@ -38,24 +40,65 @@ public class Field {
 		return !(this.fielddata[pos.getX()][pos.getY()] instanceof Creature);
 	}
 	
-	public Position[] getNightbornPositions(Position pos) {
-		Position[] retVal = new Position[8];
-		int index = 0;
-		for(int i = -1 ; i <= 1 ; i++) {
-			if(i > this.size || i < 0) continue;
-			for(int j = -1 ; i <= 1 ; j++) {
-				if(j > this.size || j < 0) continue;
-				Position testpos = new Position(i,j);
-				retVal[index] = testpos;
-				index++;
+	public void moveCreature(Creature givenCreature, Position newPos) {
+		int x = 0;
+		boolean setNew = false;
+		boolean removed = false;
+		
+		loopend:
+		for (Creature[] inner : this.fielddata) {
+			int y = 0;
+			for (Creature creature : inner) {
+				
+				// remove from old pos
+				if(creature != null && creature.equals(givenCreature)) {
+					this.fielddata[x][y] = null;
+					removed = true;
+				}
+				
+				// set at new pos
+				if(x == newPos.getX() && y == newPos.getY()) {
+					this.fielddata[x][y] = givenCreature;
+					setNew = true;
+				}
+				
+				// break if done
+				if(setNew && removed) {
+					break loopend;
+				}
+				
+				y++;
+			}
+			x++;
+		}
+	}
+	
+	public Position[] getNeighborPositions(Position pos) {
+		Stack<Position> retVal = new Stack<Position>();
+		for(int i = -1 ; i < 1 ; i++) {
+			int newX = pos.getX() + i;
+			if(newX > this.size || newX < 0) continue;
+			for(int j = -1 ; j < 1 ; j++) {
+				int newY = pos.getY() + j;
+				if(newY > this.size || newY < 0 || (i == 0 && j == 0)) continue;
+				Position testpos = new Position(newX,newY);
+				retVal.push(testpos);
 			}
 		}
 		
-		return retVal;
+		//TODO improve this shit
+		Position[] retArray = new Position[retVal.size()];
+		int index = 0;
+		while(!retVal.empty()) {
+			retArray[index] = retVal.pop();
+			index++;
+		}
+		
+		return retArray;
 	}
 	
-	public Position[] getNightbornWithCreature(Position pos, Creature cre) {
-		Position[] source = this.getNightbornPositions(pos);
+	public Position[] getNeighborWithCreature(Position pos, Creature cre) {
+		Position[] source = this.getNeighborPositions(pos);
 		Position[] retVal = new Position[8];
 		int index = 0;
 		

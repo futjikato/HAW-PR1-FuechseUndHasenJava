@@ -24,10 +24,13 @@ public class Simulator {
 		return this.creatures;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void run(int steps) {
-		// iterate over all creatures in stack
-		Stack<Creature> oldstack = this.creatures;
+		// for each step ..
 		for(int i = 0 ; i < steps ; i++) {
+			
+			// iterate over all creatures in stack
+			Stack<Creature> oldstack = this.creatures;
 			Stack<Creature> newstack = new Stack<Creature>();
 			while(!oldstack.empty()) {
 				Creature currentCreature = oldstack.pop();
@@ -38,10 +41,19 @@ public class Simulator {
 				}
 			}
 			
+			System.out.println(newstack.size());
+			
+			// ... save & update screen 
 			this.creatures = newstack;
+			this.renderer.render((Stack<Creature>)this.creatures.clone());
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		
-		this.renderer.render(this.creatures);
 	}
 	
 	public boolean populate(String baseClass, int number) {
