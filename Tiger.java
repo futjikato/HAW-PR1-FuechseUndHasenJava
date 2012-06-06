@@ -4,7 +4,11 @@ public class Tiger extends Creature {
 	}
 
 	public void process() {
-		
+		System.out.println(this);
+	}
+	
+	public String toString() {
+		return "Tiger Pos(" + this.pos.getX() + "/" + this.pos.getY() + ") Age:" + this.age;
 	}
 	
 	public int getMaxAge() {

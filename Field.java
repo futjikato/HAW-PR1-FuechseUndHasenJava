@@ -67,4 +67,29 @@ public class Field {
 		}
 		return retVal;
 	}
+	
+	public Position[] getAllFreePositions() {
+		// create array for maximum amount of positions
+		Position[] retVal = new Position[this.size*this.size];
+		
+		int index = 0;
+		int x = 0;
+		
+		for (Creature[] inner : this.fielddata) {
+			int y = 0;
+			
+			for (Creature fieldContent : inner) {
+				// collect all free fields
+				if(fieldContent == null) {
+					retVal[index] = new Position(x, y);
+					index++;
+				}
+				y++;
+			}
+			
+			x++;
+		}
+		
+		return retVal;
+	}
 }
