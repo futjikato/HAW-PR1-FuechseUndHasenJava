@@ -21,6 +21,14 @@ public class Field {
 		this.fielddata[pos.getX()][pos.getY()] = creature;
 	}
 	
+	public void removeCreature(Creature creature, Position pos) throws Exception {
+		if(this.fielddata[pos.getX()][pos.getY()].equals(creature)) {
+			this.fielddata[pos.getX()][pos.getY()] = null;
+		} else {
+			throw new Exception("Cannot remove creature because of invalid position");
+		}
+	}
+	
 	public Position getPositionOfCreature(Creature givenCreature) {
 		int x = 0;
 		for (Creature[] inner : this.fielddata) {

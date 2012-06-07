@@ -22,7 +22,7 @@ public class Simulator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Stack<Creature> simulateOneStep() {
+	public Stack<Creature> simulateOneStep() throws Exception {
 		// iterate over all creatures in stack
 		Stack<Creature> oldstack = this.creatures;
 		Stack<Creature> newstack = new Stack<Creature>();

@@ -19,9 +19,23 @@ public abstract class Creature {
 		}
 	}
 	
-	public abstract void process();
+	public boolean process() throws Exception {
+		this.age++;
+		if(this.age > this.getMaxAge()) {
+			this.die();
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public abstract int getMaxAge();
 	public abstract float[] getColor();
+	
+	protected void die() throws Exception {
+		this.alive = false;
+		this.field.removeCreature(this, this.pos);
+	}
 	
 	public boolean isAlive() {
 		return this.alive;

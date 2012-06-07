@@ -6,7 +6,11 @@ public class Tiger extends Creature {
 		super(field, randAge, pos);
 	}
 	
-	public void process() {
+	public boolean process() throws Exception {
+		// creature manages aging process
+		if(!super.process()) {
+			return false;
+		}
 		
 		// get random free neighbor field
 		Stack<Position> neighbor = this.field.getFreeNeighborPositions(this.pos);
@@ -16,6 +20,8 @@ public class Tiger extends Creature {
 		// move creature
 		this.field.moveCreature(this, newPos);
 		this.pos = newPos;
+		
+		return true;
 	}
 	
 	public String toString() {

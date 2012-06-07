@@ -103,22 +103,28 @@ public class Renderer {
 	}
 	
 	public void start() {
-		this.isRunning = true;
-		// set an valid lastFrame time on start
-		this.lastFrame = this.getTime();
-		
-		// render loop
-		while(this.isRunning) {
-			if(this.input.doClose()) {
-				this.isRunning = false;
-				break;
-			}
+		try {
+			this.isRunning = true;
+			// set an valid lastFrame time on start
+			this.lastFrame = this.getTime();
 			
-			if(this.getDelta() > 2000) {
-				Stack<Creature> creatures = this.simulator.simulateOneStep();
-				this.render(creatures);
-				this.lastFrame = this.getTime();
+			// render loop
+			while(this.isRunning) {
+				if(this.input.doClose()) {
+					this.isRunning = false;
+					break;
+				}
+				
+				if(this.getDelta() > 1000) {
+					Stack<Creature> creatures = this.simulator.simulateOneStep();
+					this.render(creatures);
+					this.lastFrame = this.getTime();
+				}
 			}
+		} catch ( Exception e ) {
+			// if something went wrong make a clean quit
+			this.isRunning = false;
+			System.out.println(e);
 		}
 		
 		Display.destroy();
