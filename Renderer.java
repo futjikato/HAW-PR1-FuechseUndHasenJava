@@ -1,8 +1,8 @@
 import java.util.Stack;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
+import org.lwjgl.*;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.glu.GLU;
 
 public class Renderer {
 	
@@ -33,14 +33,20 @@ public class Renderer {
 		}
 		
 		// init OpenGL
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glShadeModel(GL11.GL_SMOOTH);  
+		
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0, 800, 0, 600, 1, -1);
+		GL11.glLoadIdentity();		
+		GLU.gluPerspective(45.0f, ((float) 800) / ((float) 600), 0.1f, 100.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 	}
 	
 	public void drawCreature(Creature creature) {
-		// set the color of the quad (R,G,B,A)
+		// set the color of the quad (R,G,B)
 		float[] rgba = creature.getColor();
 		GL11.glColor3f(rgba[0], rgba[1], rgba[2]);
 			
@@ -55,11 +61,12 @@ public class Renderer {
 			int y1 = pos.getY() * 10 + 1;
 			int y2 = pos.getY() * 10 + 9;
 			
-		    GL11.glVertex2f(x1,y1);
-		    GL11.glVertex2f(x2,y1);
-		    GL11.glVertex2f(x2,y2);
-		    GL11.glVertex2f(x1,y2);
+		    GL11.glVertex3f(x1, 1, y1);
+		    GL11.glVertex3f(x2, 1, y1);
+		    GL11.glVertex3f(x2, 1, y2);
+		    GL11.glVertex3f(x1, 1, y2);
 		GL11.glEnd();
+		GL11.glFlush();
 	}
 	
 	public void drawCreatures(Stack<Creature> creatures) {
