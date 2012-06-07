@@ -16,6 +16,9 @@ public class App {
 		// add 10 tigers to the field
 		simulat.populate("Tiger", 10);
 		
+		// add 30 rabbits to the field
+		simulat.populate("Rabbit", 30);
+		
 		// start the simulation
 		renderer.start();
 	}
