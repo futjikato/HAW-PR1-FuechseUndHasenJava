@@ -9,11 +9,8 @@ public class Simulator {
 	
 	protected Field battlefield;
 	
-	protected Renderer renderer;
-	
-	public Simulator(Field battlefield, Renderer renderer){
+	public Simulator(Field battlefield){
 		this.battlefield = battlefield;
-		this.renderer = renderer;
 	}
 	
 	public void addCreature(Creature createure) {
@@ -25,35 +22,24 @@ public class Simulator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void run(int steps) {
-		// for each step ..
-		for(int i = 0 ; i < steps ; i++) {
+	public Stack<Creature> simulateOneStep() {
+		// iterate over all creatures in stack
+		Stack<Creature> oldstack = this.creatures;
+		Stack<Creature> newstack = new Stack<Creature>();
+		while(!oldstack.empty()) {
+			Creature currentCreature = oldstack.pop();
+			currentCreature.process();
 			
-			// iterate over all creatures in stack
-			Stack<Creature> oldstack = this.creatures;
-			Stack<Creature> newstack = new Stack<Creature>();
-			while(!oldstack.empty()) {
-				Creature currentCreature = oldstack.pop();
-				currentCreature.process();
-				
-				if(currentCreature.isAlive()) {
-					newstack.push(currentCreature);
-				}
-			}
-			
-			System.out.println(newstack.size());
-			
-			// ... save & update screen 
-			this.creatures = newstack;
-			this.renderer.render((Stack<Creature>)this.creatures.clone());
-			
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(currentCreature.isAlive()) {
+				newstack.push(currentCreature);
 			}
 		}
+		
+		System.out.println(newstack.size());
+		
+		// ... save & return new stack
+		this.creatures = newstack;
+		return (Stack<Creature>)newstack.clone();
 	}
 	
 	public boolean populate(String baseClass, int number) {

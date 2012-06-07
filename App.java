@@ -10,14 +10,14 @@ public class App {
 	public static void main(String[] args) {
 		// init all components we need
 		Field battlefield = new Field(50);
-		Renderer renderer = new Renderer(battlefield, 500, 500); // fieldsize * 10px
-		Simulator simulat = new Simulator(battlefield, renderer);
+		Simulator simulat = new Simulator(battlefield);
+		Renderer renderer = new Renderer(simulat, 500, 500); // fieldsize * 10px
 		
 		// add 10 tigers to the field
 		simulat.populate("Tiger", 10);
-		simulat.run(20);
 		
-		System.out.println("Done !");
+		// start the simulation
+		renderer.start();
 	}
 
 }
