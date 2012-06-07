@@ -117,7 +117,6 @@ public class Renderer {
 			if(this.getDelta() > 2000) {
 				Stack<Creature> creatures = this.simulator.simulateOneStep();
 				this.render(creatures);
-				System.out.println("Render field");
 				this.lastFrame = this.getTime();
 			}
 		}

@@ -97,6 +97,17 @@ public class Field {
 		return retArray;
 	}
 	
+	public Stack<Position> getFreeNeighborPositions(Position pos) {
+		Position[] neighbors = this.getNeighborPositions(pos);
+		Stack<Position> freeFields = new Stack<Position>();
+		
+		for (Position position : neighbors) {
+			if(this.isFieldFree(position)) freeFields.push(position);
+		}
+		
+		return freeFields;
+	}
+	
 	public Position[] getNeighborWithCreature(Position pos, Creature cre) {
 		Position[] source = this.getNeighborPositions(pos);
 		Position[] retVal = new Position[8];

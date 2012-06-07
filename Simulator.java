@@ -35,11 +35,9 @@ public class Simulator {
 			}
 		}
 		
-		System.out.println(newstack.size());
-		
 		// ... save & return new stack
 		this.creatures = newstack;
-		return (Stack<Creature>)newstack.clone();
+		return (Stack<Creature>)this.creatures.clone();
 	}
 	
 	public boolean populate(String baseClass, int number) {
@@ -74,7 +72,7 @@ public class Simulator {
 				this.creatures.push(inst);
 			}
 		} catch (Exception e) {
-			System.out.print(e.toString() + "\n");
+			System.out.println(e);
 			return false;
 		}
 		return true;

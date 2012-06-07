@@ -11,6 +11,7 @@ public abstract class Creature {
 	
 	public Creature(Field field, boolean randAge, Position pos) {
 		this.pos = pos;
+		field.setPosition(this, pos);
 		this.field = field;
 		
 		if(randAge) {

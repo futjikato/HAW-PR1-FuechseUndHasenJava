@@ -1,3 +1,6 @@
+import java.util.Collections;
+import java.util.Stack;
+
 public class Tiger extends Creature {
 	public Tiger(Field field, boolean randAge, Position pos) {
 		super(field, randAge, pos);
@@ -6,16 +9,13 @@ public class Tiger extends Creature {
 	public void process() {
 		
 		// get random free neighbor field
-		Position[] neighbor = this.field.getNeighborPositions(this.pos);
-		
-		Position free;
-		do {
-			free = neighbor[(int)(Math.random()*neighbor.length)];
-		} while(!this.field.isFieldFree(free));
+		Stack<Position> neighbor = this.field.getFreeNeighborPositions(this.pos);
+		Collections.shuffle(neighbor);
+		Position newPos = neighbor.pop();
 		
 		// move creature
-		this.field.moveCreature(this, free);
-		this.pos = free;
+		this.field.moveCreature(this, newPos);
+		this.pos = newPos;
 	}
 	
 	public String toString() {
