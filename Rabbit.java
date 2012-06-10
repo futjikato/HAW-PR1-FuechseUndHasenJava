@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class Rabbit extends Creature {
 	
-	public Rabbit(Field field, boolean randAge, Position pos) {
+	public Rabbit(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
 	}
 	

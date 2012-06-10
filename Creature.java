@@ -9,7 +9,12 @@ public abstract class Creature {
 	
 	protected Position pos;
 	
-	public Creature(Field field, boolean randAge, Position pos) {
+	public Creature(Field field, boolean randAge, Position pos) throws Exception {
+		
+		if(!(pos instanceof Position)) {
+			throw new Exception("Invalid Position");
+		}
+		
 		this.pos = pos;
 		field.setPosition(this, pos);
 		this.field = field;
@@ -33,8 +38,8 @@ public abstract class Creature {
 	public abstract float[] getColor();
 	
 	protected void die() throws Exception {
-		this.alive = false;
-		this.field.removeCreature(this, this.pos);
+//		this.alive = false;
+//		this.field.removeCreature(this, this.pos);
 	}
 	
 	public boolean isAlive() {

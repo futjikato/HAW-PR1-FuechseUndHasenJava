@@ -2,7 +2,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class Tiger extends Creature {
-	public Tiger(Field field, boolean randAge, Position pos) {
+	public Tiger(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
 	}
 	

@@ -22,7 +22,7 @@ public class Field {
 	}
 	
 	public void removeCreature(Creature creature, Position pos) throws Exception {
-		if(this.fielddata[pos.getX()][pos.getY()].equals(creature)) {
+		if(creature.equals(this.fielddata[pos.getX()][pos.getY()])) {
 			this.fielddata[pos.getX()][pos.getY()] = null;
 		} else {
 			throw new Exception("Cannot remove creature because of invalid position");

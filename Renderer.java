@@ -55,7 +55,10 @@ public class Renderer {
 			
 		// move to the right position
 		Position pos = creature.pos;
-		GL11.glTranslatef(pos.getX()*-0.25f, 0.0f, pos.getY()*-0.25f);
+		float x = (pos.getX() - (this.width/10)) * 0.25f;
+		float z = (pos.getY() - (this.height/10)) * 0.25f;
+		System.out.println("[" + creature.hashCode() + "]" + x + "/" + z);
+		GL11.glTranslatef(x, 0.0f, z);
 		
 		// draw quad
 		GL11.glBegin(GL11.GL_QUADS);

@@ -14,10 +14,20 @@ public class App {
 		Renderer renderer = new Renderer(simulat, 500, 500); // fieldsize * 10px
 		
 		// add 10 tigers to the field
-		simulat.populate("Tiger", 10);
+		try {
+			simulat.populate("Tiger", 10);
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			System.out.println("Failed to add tigers :(");
+		}
 		
 		// add 30 rabbits to the field
-		simulat.populate("Rabbit", 30);
+		try {
+			simulat.populate("Rabbit", 30);
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			System.out.println("Failed to add rabbits :(");
+		}
 		
 		// start the simulation
 		renderer.start();
