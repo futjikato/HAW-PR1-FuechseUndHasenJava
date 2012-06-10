@@ -17,8 +17,9 @@ public class Simulator {
 		this.creatures.push(createure);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Stack<Creature> getCreatures() {
-		return this.creatures;
+		return (Stack<Creature>)this.creatures.clone();
 	}
 	
 	@SuppressWarnings("unchecked")
