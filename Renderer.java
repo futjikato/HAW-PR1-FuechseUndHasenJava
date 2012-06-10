@@ -32,17 +32,20 @@ public class Renderer {
 			e.printStackTrace();
 		}
 		
-		// init OpenGL
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glShadeModel(GL11.GL_SMOOTH);  
-		
+		GL11.glViewport(0, 0, width, height);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();		
-		GLU.gluPerspective(45.0f, ((float) 800) / ((float) 600), 0.1f, 100.0f);
+		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 100.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		GL11.glLoadIdentity();
+		
+		GL11.glShadeModel(GL11.GL_SMOOTH); // Enables Smooth Shading
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Black Background
+		GL11.glClearDepth(1.0f); // Depth Buffer Setup
+		GL11.glEnable(GL11.GL_DEPTH_TEST); // Enables Depth Testing
+		GL11.glDepthFunc(GL11.GL_LEQUAL); // The Type Of Depth Test To Do
+		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST); // Really Nice Perspective Calculations
+ 
 	}
 	
 	public void drawCreature(Creature creature) {
@@ -50,21 +53,42 @@ public class Renderer {
 		float[] rgba = creature.getColor();
 		GL11.glColor3f(rgba[0], rgba[1], rgba[2]);
 			
+		// move to the right position
 		Position pos = creature.pos;
+		GL11.glTranslatef(pos.getX()*-0.25f, 0.0f, pos.getY()*-0.25f);
 		
 		// draw quad
 		GL11.glBegin(GL11.GL_QUADS);
 			
-			// coords where to draw the quad
-			int x1 = pos.getX() * 10 - 1;
-			int x2 = pos.getX() * 10 + 9;
-			int y1 = pos.getY() * 10 + 1;
-			int y2 = pos.getY() * 10 + 9;
-			
-		    GL11.glVertex3f(x1, 1, y1);
-		    GL11.glVertex3f(x2, 1, y1);
-		    GL11.glVertex3f(x2, 1, y2);
-		    GL11.glVertex3f(x1, 1, y2);
+			GL11.glVertex3f(0.25f, 0.25f, -0.25f); // Top Right Of The Quad (Top)
+			GL11.glVertex3f(-0.25f, 0.25f, -0.25f); // Top Left Of The Quad (Top)
+			GL11.glVertex3f(-0.25f, 0.25f, 0.25f); // Bottom Left Of The Quad (Top)
+			GL11.glVertex3f(0.25f, 0.25f, 0.25f); // Bottom Right Of The Quad (Top)
+	
+			GL11.glVertex3f(0.25f, -0.25f, 0.25f); // Top Right Of The Quad (Bottom)
+			GL11.glVertex3f(-0.25f, -0.25f, 0.25f); // Top Left Of The Quad (Bottom)
+			GL11.glVertex3f(-0.25f, -0.25f, -0.25f); // Bottom Left Of The Quad (Bottom)
+			GL11.glVertex3f(0.25f, -0.25f, -0.25f); // Bottom Right Of The Quad (Bottom)
+	
+			GL11.glVertex3f(0.25f, 0.25f, 0.25f); // Top Right Of The Quad (Front)
+			GL11.glVertex3f(-0.25f, 0.25f, 0.25f); // Top Left Of The Quad (Front)
+			GL11.glVertex3f(-0.25f, -0.25f, 0.25f); // Bottom Left Of The Quad (Front)
+			GL11.glVertex3f(0.25f, -0.25f, 0.25f); // Bottom Right Of The Quad (Front)
+	
+			GL11.glVertex3f(0.25f, -0.25f, -0.25f); // Bottom Left Of The Quad (Back)
+			GL11.glVertex3f(-0.25f, -0.25f, -0.25f); // Bottom Right Of The Quad (Back)
+			GL11.glVertex3f(-0.25f, 0.25f, -0.25f); // Top Right Of The Quad (Back)
+			GL11.glVertex3f(0.25f, 0.25f, -0.25f); // Top Left Of The Quad (Back)
+	
+			GL11.glVertex3f(-0.25f, 0.25f, 0.25f); // Top Right Of The Quad (Left)
+			GL11.glVertex3f(-0.25f, 0.25f, -0.25f); // Top Left Of The Quad (Left)
+			GL11.glVertex3f(-0.25f, -0.25f, -0.25f); // Bottom Left Of The Quad (Left)
+			GL11.glVertex3f(-0.25f, -0.25f, 0.25f); // Bottom Right Of The Quad (Left)
+	
+			GL11.glVertex3f(0.25f, 0.25f, -0.25f); // Top Right Of The Quad (Right)
+			GL11.glVertex3f(0.25f, 0.25f, 0.25f); // Top Left Of The Quad (Right)
+			GL11.glVertex3f(0.25f, -0.25f, 0.25f); // Bottom Left Of The Quad (Right)
+			GL11.glVertex3f(0.25f, -0.25f, -0.25f); // Bottom Right Of The Quad (Right)
 		GL11.glEnd();
 		GL11.glFlush();
 	}
@@ -78,7 +102,8 @@ public class Renderer {
 	
 	public void render(Stack<Creature> creatures) {
 		// Clear the screen and depth buffer
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glLoadIdentity();
 		
 		// draw everything on the field
 		this.drawCreatures(creatures);
@@ -110,6 +135,11 @@ public class Renderer {
 	}
 	
 	public void start() {
+		
+		// render inital state
+		this.render(this.simulator.getCreatures());
+		this.lastFrame = this.getTime();
+		
 		try {
 			this.isRunning = true;
 			// set an valid lastFrame time on start
@@ -124,7 +154,9 @@ public class Renderer {
 				
 				if(this.getDelta() > 1000) {
 					Stack<Creature> creatures = this.simulator.simulateOneStep();
+					System.out.print("render...");
 					this.render(creatures);
+					System.out.print("done\n");
 					this.lastFrame = this.getTime();
 				}
 			}
