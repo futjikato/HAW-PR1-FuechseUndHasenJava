@@ -13,9 +13,6 @@ public class Renderer {
 	protected InputHandler input;
 	protected long lastFrame;
 	
-	protected int curr_x;
-	protected int curr_y;
-
 	public Renderer(Simulator simulator, int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -89,7 +86,11 @@ public class Renderer {
 	}
 	
 	public void drawField() {
+		// set field color to some green
 		GL11.glColor3f(0.1f, 0.9f, 0.25f);
+		
+		// move render pencil to init pos
+		GL11.glTranslatef(-25, -10, -120);
 		
 		GL11.glBegin(GL11.GL_QUADS);
 		
@@ -118,12 +119,8 @@ public class Renderer {
 	}
 	
 	public void drawCreatures(Stack<Creature> creatures) {
-		// reset current render position
-		this.curr_x = 0;
-		this.curr_y = 0;
 		
-		// move render pencil to init pos
-		GL11.glTranslatef(-25, -10, -120);
+		
 		
 		// draw field
 		this.drawField();
