@@ -12,6 +12,9 @@ public class Renderer {
 	protected boolean isRunning = false;
 	protected InputHandler input;
 	protected long lastFrame;
+	
+	protected int curr_x;
+	protected int curr_y;
 
 	public Renderer(Simulator simulator, int width, int height) {
 		this.width = width;
@@ -35,7 +38,7 @@ public class Renderer {
 		GL11.glViewport(0, 0, width, height);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();		
-		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 100.0f);
+		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 200.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		
@@ -48,6 +51,57 @@ public class Renderer {
  
 	}
 	
+	protected void drawCube(float size) {
+		GL11.glBegin(GL11.GL_QUADS);
+		
+		GL11.glVertex3f(size, size, -size); // Top Right Of The Quad (Top)
+		GL11.glVertex3f(-size, size, -size); // Top Left Of The Quad (Top)
+		GL11.glVertex3f(-size, size, size); // Bottom Left Of The Quad (Top)
+		GL11.glVertex3f(size, size, size); // Bottom Right Of The Quad (Top)
+
+		GL11.glVertex3f(size, -size, size); // Top Right Of The Quad (Bottom)
+		GL11.glVertex3f(-size, -size, size); // Top Left Of The Quad (Bottom)
+		GL11.glVertex3f(-size, -size, -size); // Bottom Left Of The Quad (Bottom)
+		GL11.glVertex3f(size, -size, -size); // Bottom Right Of The Quad (Bottom)
+
+		GL11.glVertex3f(size, size, size); // Top Right Of The Quad (Front)
+		GL11.glVertex3f(-size, size, size); // Top Left Of The Quad (Front)
+		GL11.glVertex3f(-size, -size, size); // Bottom Left Of The Quad (Front)
+		GL11.glVertex3f(size, -size, size); // Bottom Right Of The Quad (Front)
+
+		GL11.glVertex3f(size, -size, -size); // Bottom Left Of The Quad (Back)
+		GL11.glVertex3f(-size, -size, -size); // Bottom Right Of The Quad (Back)
+		GL11.glVertex3f(-size, size, -size); // Top Right Of The Quad (Back)
+		GL11.glVertex3f(size, size, -size); // Top Left Of The Quad (Back)
+
+		GL11.glVertex3f(-size, size, size); // Top Right Of The Quad (Left)
+		GL11.glVertex3f(-size, size, -size); // Top Left Of The Quad (Left)
+		GL11.glVertex3f(-size, -size, -size); // Bottom Left Of The Quad (Left)
+		GL11.glVertex3f(-size, -size, size); // Bottom Right Of The Quad (Left)
+
+		GL11.glVertex3f(size, size, -size); // Top Right Of The Quad (Right)
+		GL11.glVertex3f(size, size, size); // Top Left Of The Quad (Right)
+		GL11.glVertex3f(size, -size, size); // Bottom Left Of The Quad (Right)
+		GL11.glVertex3f(size, -size, -size); // Bottom Right Of The Quad (Right)
+		
+		GL11.glEnd();
+		GL11.glFlush();
+	}
+	
+	public void drawField() {
+		GL11.glColor3f(0.1f, 0.9f, 0.25f);
+		
+		GL11.glBegin(GL11.GL_QUADS);
+		
+			GL11.glVertex3f(0, -1, 0); // far left edge
+			GL11.glVertex3f(50, -1, 0); // near left edge
+			GL11.glVertex3f(50, -1, 50); // near right edge
+			GL11.glVertex3f(0, -1, 50); // far right edge
+		
+		GL11.glEnd();
+		GL11.glFlush();
+	}
+	
 	public void drawCreature(Creature creature) {
 		// set the color of the quad (R,G,B)
 		float[] rgba = creature.getColor();
@@ -55,48 +109,25 @@ public class Renderer {
 			
 		// move to the right position
 		Position pos = creature.pos;
-		float x = (pos.getX() - (this.width/10)) * 0.25f;
-		float z = (pos.getY() - (this.height/10)) * 0.25f;
-		System.out.println("[" + creature.hashCode() + "]" + x + "/" + z);
-		GL11.glTranslatef(x, 0.0f, z);
+		GL11.glLoadIdentity();
+		GL11.glTranslatef(-25, -10, -120);
+		GL11.glTranslatef(pos.getX(), 0, pos.getY());
 		
-		// draw quad
-		GL11.glBegin(GL11.GL_QUADS);
-			
-			GL11.glVertex3f(0.25f, 0.25f, -0.25f); // Top Right Of The Quad (Top)
-			GL11.glVertex3f(-0.25f, 0.25f, -0.25f); // Top Left Of The Quad (Top)
-			GL11.glVertex3f(-0.25f, 0.25f, 0.25f); // Bottom Left Of The Quad (Top)
-			GL11.glVertex3f(0.25f, 0.25f, 0.25f); // Bottom Right Of The Quad (Top)
-	
-			GL11.glVertex3f(0.25f, -0.25f, 0.25f); // Top Right Of The Quad (Bottom)
-			GL11.glVertex3f(-0.25f, -0.25f, 0.25f); // Top Left Of The Quad (Bottom)
-			GL11.glVertex3f(-0.25f, -0.25f, -0.25f); // Bottom Left Of The Quad (Bottom)
-			GL11.glVertex3f(0.25f, -0.25f, -0.25f); // Bottom Right Of The Quad (Bottom)
-	
-			GL11.glVertex3f(0.25f, 0.25f, 0.25f); // Top Right Of The Quad (Front)
-			GL11.glVertex3f(-0.25f, 0.25f, 0.25f); // Top Left Of The Quad (Front)
-			GL11.glVertex3f(-0.25f, -0.25f, 0.25f); // Bottom Left Of The Quad (Front)
-			GL11.glVertex3f(0.25f, -0.25f, 0.25f); // Bottom Right Of The Quad (Front)
-	
-			GL11.glVertex3f(0.25f, -0.25f, -0.25f); // Bottom Left Of The Quad (Back)
-			GL11.glVertex3f(-0.25f, -0.25f, -0.25f); // Bottom Right Of The Quad (Back)
-			GL11.glVertex3f(-0.25f, 0.25f, -0.25f); // Top Right Of The Quad (Back)
-			GL11.glVertex3f(0.25f, 0.25f, -0.25f); // Top Left Of The Quad (Back)
-	
-			GL11.glVertex3f(-0.25f, 0.25f, 0.25f); // Top Right Of The Quad (Left)
-			GL11.glVertex3f(-0.25f, 0.25f, -0.25f); // Top Left Of The Quad (Left)
-			GL11.glVertex3f(-0.25f, -0.25f, -0.25f); // Bottom Left Of The Quad (Left)
-			GL11.glVertex3f(-0.25f, -0.25f, 0.25f); // Bottom Right Of The Quad (Left)
-	
-			GL11.glVertex3f(0.25f, 0.25f, -0.25f); // Top Right Of The Quad (Right)
-			GL11.glVertex3f(0.25f, 0.25f, 0.25f); // Top Left Of The Quad (Right)
-			GL11.glVertex3f(0.25f, -0.25f, 0.25f); // Bottom Left Of The Quad (Right)
-			GL11.glVertex3f(0.25f, -0.25f, -0.25f); // Bottom Right Of The Quad (Right)
-		GL11.glEnd();
-		GL11.glFlush();
+		// draw cubes
+		this.drawCube(1);
 	}
 	
 	public void drawCreatures(Stack<Creature> creatures) {
+		// reset current render position
+		this.curr_x = 0;
+		this.curr_y = 0;
+		
+		// move render pencil to init pos
+		GL11.glTranslatef(-25, -10, -120);
+		
+		// draw field
+		this.drawField();
+		
 		while(!creatures.empty()) {
 			Creature currCreature = creatures.pop();
 			this.drawCreature(currCreature);
