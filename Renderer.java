@@ -13,6 +13,9 @@ public class Renderer {
 	protected InputHandler input;
 	protected long lastFrame;
 	
+	protected float cx = 0;
+	protected float cy = 0;
+	
 	public Renderer(Simulator simulator, int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -89,8 +92,8 @@ public class Renderer {
 		// set field color to some green
 		GL11.glColor3f(0.1f, 0.9f, 0.25f);
 		
-		// move render pencil to init pos
-		GL11.glTranslatef(-25, -10, -120);
+		// move render pencil to 0/0
+		this.moveTo(0, 0);
 		
 		GL11.glBegin(GL11.GL_QUADS);
 		
@@ -110,9 +113,7 @@ public class Renderer {
 			
 		// move to the right position
 		Position pos = creature.pos;
-		GL11.glLoadIdentity();
-		GL11.glTranslatef(-25, -10, -120);
-		GL11.glTranslatef(pos.getX(), 0, pos.getY());
+		this.moveTo(pos.getX(), pos.getY());
 		
 		// draw cubes
 		this.drawCube(0.5f);
@@ -130,11 +131,18 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glLoadIdentity();
 		
+		// set perspective
+		this.moveTo(0, 0);
+		GL11.glRotatef(20, 1, 0, 0);
+		
 		// draw field
 		this.drawField();
 		
 		// draw everything on the field
 		this.drawCreatures(creatures);
+		
+		// move viewport to inital position
+		this.moveTo(25, 120);
 		
 		// update screen
 		Display.update();
@@ -160,6 +168,14 @@ public class Renderer {
 	 */
 	public long getTime() {
 	    return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	}
+	
+	public void moveTo(float x, float y) {
+		float diffx = (x - 25) - this.cx;
+		float diffy = (y - 120) - this.cy;
+		GL11.glTranslatef(diffx, 0, diffy);
+		this.cx = (x - 25);
+		this.cy = (y - 120);
 	}
 	
 	public void start() {
