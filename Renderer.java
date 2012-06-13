@@ -94,10 +94,10 @@ public class Renderer {
 		
 		GL11.glBegin(GL11.GL_QUADS);
 		
-			GL11.glVertex3f(0, -1, 0); // far left edge
-			GL11.glVertex3f(50, -1, 0); // near left edge
-			GL11.glVertex3f(50, -1, 50); // near right edge
-			GL11.glVertex3f(0, -1, 50); // far right edge
+			GL11.glVertex3f(0, -0.5f, 0); // far left edge
+			GL11.glVertex3f(50, -0.5f, 0); // near left edge
+			GL11.glVertex3f(50, -0.5f, 50); // near right edge
+			GL11.glVertex3f(0, -0.5f, 50); // far right edge
 		
 		GL11.glEnd();
 		GL11.glFlush();
@@ -115,16 +115,10 @@ public class Renderer {
 		GL11.glTranslatef(pos.getX(), 0, pos.getY());
 		
 		// draw cubes
-		this.drawCube(1);
+		this.drawCube(0.5f);
 	}
 	
 	public void drawCreatures(Stack<Creature> creatures) {
-		
-		
-		
-		// draw field
-		this.drawField();
-		
 		while(!creatures.empty()) {
 			Creature currCreature = creatures.pop();
 			this.drawCreature(currCreature);
@@ -135,6 +129,9 @@ public class Renderer {
 		// Clear the screen and depth buffer
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glLoadIdentity();
+		
+		// draw field
+		this.drawField();
 		
 		// draw everything on the field
 		this.drawCreatures(creatures);
