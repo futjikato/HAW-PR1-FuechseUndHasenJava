@@ -13,6 +13,8 @@ public class Renderer {
 	protected InputHandler input;
 	protected long lastFrame;
 	protected long lastGeneratione;
+	protected long lastFPS;
+	protected int fps = 0;
 	
 	protected float cx = 0;
 	protected float cy = 0;
@@ -147,9 +149,21 @@ public class Renderer {
 		// draw everything on the field
 		this.drawCreatures(creatures);
 		
+		// move viewport/camera
+		this.camera_x = this.input.handleCameraX(this.camera_x);
+		this.camera_y = this.input.handleCameraY(this.camera_y);
+		this.camera_rotation = this.input.handleRotation(this.camera_rotation);
+		
+		GL11.glLoadIdentity();
+		this.moveTo(this.camera_x, this.camera_y);
+		GL11.glRotatef(this.camera_rotation, 0, 0, 1);
+		
 		// update screen
 		Display.update();
 		this.lastFrame = this.getTime();
+		
+		// update fps
+		this.updateFPS();
 	}
 	
 	/** 
@@ -173,7 +187,7 @@ public class Renderer {
 	 */
 	public int getGenerationDelta() {
 	    long time = getTime();
-	    int delta = (int) (time - lastGeneratione);
+	    int delta = (int) (time - this.lastGeneratione);
 	 
 	    return delta;
 	}
@@ -185,6 +199,18 @@ public class Renderer {
 	 */
 	public long getTime() {
 	    return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	}
+	
+	/**
+	 * Calculate the FPS and set it in the title bar
+	 */
+	public void updateFPS() {
+	    if (getTime() - this.lastFPS > 1000) {
+	        System.out.println("FPS : " + this.fps);
+	        this.fps = 0; //reset the FPS counter
+	        this.lastFPS += 1000; //add one second
+	    }
+	    fps++;
 	}
 	
 	public void moveTo(float x, float y) {
@@ -200,6 +226,7 @@ public class Renderer {
 		// render inital state
 		this.render(this.simulator.getCreatures());
 		this.lastFrame = this.getTime();
+		this.lastFPS = this.getTime();
 		
 		try {
 			this.isRunning = true;
@@ -222,21 +249,12 @@ public class Renderer {
 						return;
 					}
 					
-					// this generate field has code
-					this.simulator.getField().printCode();
-					
 					this.lastGeneratione = this.getTime();
 				} else {
 					creatures = this.simulator.getCreatures();
 				}
 				
 				this.render(creatures);
-				
-				// move viewport/camera
-				this.camera_x = this.input.handleCameraX(this.camera_x);
-				this.camera_y = this.input.handleCameraY(this.camera_y);
-				this.moveTo(this.camera_x, this.camera_y);
-				GL11.glRotatef(this.camera_rotation, 0, 1, 0);
 			}
 		} catch ( Exception e ) {
 			// if something went wrong make a clean quit
