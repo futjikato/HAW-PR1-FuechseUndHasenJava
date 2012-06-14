@@ -12,9 +12,14 @@ public class Renderer {
 	protected boolean isRunning = false;
 	protected InputHandler input;
 	protected long lastFrame;
+	protected long lastGeneratione;
 	
 	protected float cx = 0;
 	protected float cy = 0;
+	
+	protected float camera_x = 25;
+	protected float camera_y = 120;
+	protected float camera_rotation = 0;
 	
 	public Renderer(Simulator simulator, int width, int height) {
 		this.width = width;
@@ -133,7 +138,8 @@ public class Renderer {
 		
 		// set perspective
 		this.moveTo(0, 0);
-		GL11.glRotatef(20, 1, 0, 0);
+		GL11.glRotatef(40, 1, 0, 0);
+		GL11.glTranslatef(0, 20, 0);
 		
 		// draw field
 		this.drawField();
@@ -141,11 +147,9 @@ public class Renderer {
 		// draw everything on the field
 		this.drawCreatures(creatures);
 		
-		// move viewport to inital position
-		this.moveTo(25, 120);
-		
 		// update screen
 		Display.update();
+		this.lastFrame = this.getTime();
 	}
 	
 	/** 
@@ -157,6 +161,19 @@ public class Renderer {
 	public int getDelta() {
 	    long time = getTime();
 	    int delta = (int) (time - lastFrame);
+	 
+	    return delta;
+	}
+	
+	/** 
+	 * Calculate how many milliseconds have passed 
+	 * since last frame.
+	 * 
+	 * @return milliseconds passed since last frame 
+	 */
+	public int getGenerationDelta() {
+	    long time = getTime();
+	    int delta = (int) (time - lastGeneratione);
 	 
 	    return delta;
 	}
@@ -196,20 +213,30 @@ public class Renderer {
 					break;
 				}
 				
-				if(this.getDelta() > 1000) {
-					Stack<Creature> creatures = this.simulator.simulateOneStep();
+				Stack<Creature> creatures = null;
+				if(this.getGenerationDelta() > 1000) {
+					creatures = this.simulator.simulateOneStep();
 					if(creatures == null) {
 						System.out.println("-END- with error");
 						this.stop();
 						return;
 					}
-					this.render(creatures);
 					
 					// this generate field has code
 					this.simulator.getField().printCode();
 					
-					this.lastFrame = this.getTime();
+					this.lastGeneratione = this.getTime();
+				} else {
+					creatures = this.simulator.getCreatures();
 				}
+				
+				this.render(creatures);
+				
+				// move viewport/camera
+				this.camera_x = this.input.handleCameraX(this.camera_x);
+				this.camera_y = this.input.handleCameraY(this.camera_y);
+				this.moveTo(this.camera_x, this.camera_y);
+				GL11.glRotatef(this.camera_rotation, 0, 1, 0);
 			}
 		} catch ( Exception e ) {
 			// if something went wrong make a clean quit
