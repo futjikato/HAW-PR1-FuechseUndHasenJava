@@ -1,6 +1,3 @@
-import java.util.Collections;
-import java.util.Stack;
-
 public class Tiger extends Creature {
 	public Tiger(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
@@ -13,15 +10,6 @@ public class Tiger extends Creature {
 			return false;
 		}
 		
-		// get random free neighbor field
-		Stack<Position> neighbor = this.field.getFreeNeighborPositions(this.pos);
-		Collections.shuffle(neighbor);
-		Position newPos = neighbor.pop();
-		
-		// move creature
-		this.field.moveCreature(this, newPos);
-		this.pos = newPos;
-		
 		return true;
 	}
 	
@@ -31,7 +19,7 @@ public class Tiger extends Creature {
 	
 	@Override
 	public int getMaxAge() {
-		return 20;
+		return 10;
 	}
 	
 	@Override
@@ -39,4 +27,29 @@ public class Tiger extends Creature {
 		float[] rgba = { 0.5f , 0.5f , 1.0f };
 		return rgba;
 	}
+	
+	@Override
+	protected String[] getFood() {
+		return new String[]{"Rabbit"};
+	}
+	
+	@Override
+	protected int getInitFoodLevel() {
+		return 4;
+	}
+	
+	@Override 
+	protected void eat(Creature foodObj) {
+		this.foodLevel += 1;
+	}
+	
+	@Override
+	public void spawnChild() throws Exception {
+		Position newPos = this.field.getRandomFreeNeightbor(this.pos);
+		if(newPos != null) {
+			Tiger child = new Tiger(this.field, false, newPos);
+			Simulator.getInstance().addCreature(child);
+		}
+	}
+
 }

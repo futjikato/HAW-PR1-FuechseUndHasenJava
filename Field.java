@@ -1,3 +1,4 @@
+import java.util.Collections;
 import java.util.Stack;
 
 
@@ -21,27 +22,32 @@ public class Field {
 		this.fielddata[pos.getX()][pos.getY()] = creature;
 	}
 	
-	public void removeCreature(Creature creature, Position pos) throws Exception {
-		if(creature.equals(this.fielddata[pos.getX()][pos.getY()])) {
-			this.fielddata[pos.getX()][pos.getY()] = null;
-		} else {
-			throw new Exception("Cannot remove creature because of invalid position");
-		}
+	public void removeCreature(Position pos) {
+		this.fielddata[pos.getX()][pos.getY()] = null;
 	}
 	
-	public Position getPositionOfCreature(Creature givenCreature) {
-		int x = 0;
-		for (Creature[] inner : this.fielddata) {
-			int y = 0;
-			for (Creature creature : inner) {
-				if(creature.equals(givenCreature)) {
-					return new Position(x, y);
+	public Creature getRandomNeightbor(Position pos, String[] foodCreatures) {
+		Position[] neighbors = this.getNeighborPositions(pos);
+		Stack<Creature> fields = new Stack<Creature>();
+		
+		for (Position position : neighbors) {
+			for (String className : foodCreatures) {
+				if(
+					this.fielddata[position.getX()][position.getY()] != null &&
+					this.fielddata[position.getX()][position.getY()].getClass().toString().equals(className)
+				) { 
+					fields.push(this.fielddata[position.getX()][position.getY()]);
 				}
-				y++;
+				break;
 			}
-			x++;
 		}
-		return null;
+		
+		Collections.shuffle(fields);
+		if(fields.size() > 0) {
+			return fields.pop();
+		} else {
+			return null;
+		}
 	}
 	
 	public boolean isFieldFree(Position pos) {
@@ -81,7 +87,7 @@ public class Field {
 		}
 	}
 	
-	public Position[] getNeighborPositions(Position pos) {
+	protected Position[] getNeighborPositions(Position pos) {
 		Stack<Position> retVal = new Stack<Position>();
 		for(int i = -1 ; i <= 1 ; i++) {
 			int newX = pos.getX() + i;
@@ -105,7 +111,7 @@ public class Field {
 		return retArray;
 	}
 	
-	public Stack<Position> getFreeNeighborPositions(Position pos) {
+	public Position getRandomFreeNeightbor(Position pos) {
 		Position[] neighbors = this.getNeighborPositions(pos);
 		Stack<Position> freeFields = new Stack<Position>();
 		
@@ -113,7 +119,12 @@ public class Field {
 			if(this.isFieldFree(position)) freeFields.push(position);
 		}
 		
-		return freeFields;
+		Collections.shuffle(freeFields);
+		if(freeFields.size() > 0) {
+			return freeFields.pop();
+		} else {
+			return null;
+		}
 	}
 	
 	public Position[] getNeighborWithCreature(Position pos, Creature cre) {

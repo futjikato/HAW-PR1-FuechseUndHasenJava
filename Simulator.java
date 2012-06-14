@@ -9,8 +9,15 @@ public class Simulator {
 	
 	protected Field battlefield;
 	
+	protected static Simulator instance;
+	
 	public Simulator(Field battlefield){
 		this.battlefield = battlefield;
+		Simulator.instance = this;
+	}
+	
+	public static Simulator getInstance() {
+		return Simulator.instance;
 	}
 	
 	public void addCreature(Creature createure) {
@@ -23,22 +30,29 @@ public class Simulator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Stack<Creature> simulateOneStep() throws Exception {
-		// iterate over all creatures in stack
-		Stack<Creature> oldstack = this.creatures;
-		Stack<Creature> newstack = new Stack<Creature>();
-		while(!oldstack.empty()) {
-			Creature currentCreature = oldstack.pop();
-			currentCreature.process();
-			
-			if(currentCreature.isAlive()) {
-				newstack.push(currentCreature);
+	public Stack<Creature> simulateOneStep() {
+		try {
+			// iterate over all creatures in stack
+			Stack<Creature> oldstack = this.creatures;
+			Stack<Creature> newstack = new Stack<Creature>();
+			while(!oldstack.empty()) {
+				Creature currentCreature = oldstack.pop();
+				currentCreature.process();
+				
+				if(currentCreature.isAlive()) {
+					newstack.push(currentCreature);
+				}
 			}
+			
+			// ... save & return new stack
+			this.creatures = newstack;
+			return (Stack<Creature>)this.creatures.clone();
+		} catch ( Exception e ) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			
+			return null;
 		}
-		
-		// ... save & return new stack
-		this.creatures = newstack;
-		return (Stack<Creature>)this.creatures.clone();
 	}
 	
 	public boolean populate(String baseClass, int number) {
@@ -70,7 +84,7 @@ public class Simulator {
 				Constructor<?> constructor = constructors[0];
 				Creature inst = (Creature)creatureClass.getConstructor(constructor.getParameterTypes()).newInstance(this.battlefield, true, pos);
 				
-				this.creatures.push(inst);
+				this.addCreature(inst);
 			}
 		} catch (Exception e) {
 			System.out.println(e);

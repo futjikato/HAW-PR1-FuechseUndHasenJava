@@ -1,7 +1,3 @@
-import java.util.Collections;
-import java.util.Stack;
-
-
 public class Rabbit extends Creature {
 	
 	public Rabbit(Field field, boolean randAge, Position pos) throws Exception {
@@ -15,21 +11,12 @@ public class Rabbit extends Creature {
 			return false;
 		}
 		
-		// get random free neighbor field
-		Stack<Position> neighbor = this.field.getFreeNeighborPositions(this.pos);
-		Collections.shuffle(neighbor);
-		Position newPos = neighbor.pop();
-		
-		// move creature
-		this.field.moveCreature(this, newPos);
-		this.pos = newPos;
-		
 		return true;
 	}
 
 	@Override
 	public int getMaxAge() {
-		return 12;
+		return 2;
 	}
 
 	@Override
@@ -38,4 +25,27 @@ public class Rabbit extends Creature {
 		return rgba;
 	}
 
+	@Override
+	protected String[] getFood() {
+		return new String[]{};
+	}
+	
+	@Override
+	protected int getInitFoodLevel() {
+		return 1;
+	}
+	
+	@Override 
+	protected void eat(Creature foodObj) {
+		
+	}
+	
+	@Override
+	public void spawnChild() throws Exception {
+		Position newPos = this.field.getRandomFreeNeightbor(this.pos);
+		if(newPos != null) {
+			Rabbit child = new Rabbit(this.field, false, newPos);
+			Simulator.getInstance().addCreature(child);
+		}
+	}
 }
