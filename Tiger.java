@@ -39,16 +39,19 @@ public class Tiger extends Creature {
 	}
 	
 	@Override 
-	protected void eat(Creature foodObj) {
-		this.foodLevel += 1;
+	protected void eat(Creature foodObj) throws Exception {
+		this.foodLevel += 2;
+		this.spawnChild();
 	}
 	
 	@Override
 	public void spawnChild() throws Exception {
-		Position newPos = this.field.getRandomFreeNeightbor(this.pos);
-		if(newPos != null) {
-			Tiger child = new Tiger(this.field, false, newPos);
-			Simulator.getInstance().addCreature(child);
+		if(this.foodLevel >= 3 && this.age > 4) {
+			Position newPos = this.field.getRandomFreeNeightbor(this.pos);
+			if(newPos != null) {
+				Tiger child = new Tiger(this.field, false, newPos);
+				Simulator.getInstance().addCreature(child);
+			}
 		}
 	}
 

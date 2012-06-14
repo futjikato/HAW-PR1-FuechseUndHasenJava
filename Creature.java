@@ -84,7 +84,7 @@ public abstract class Creature {
 	protected abstract String[] getFood();
 	protected abstract int getInitFoodLevel();
 	
-	protected void eat(Creature foodObj) {
+	protected void eat(Creature foodObj) throws Exception {
 		// do nothing on default
 	}
 	

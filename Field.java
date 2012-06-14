@@ -34,7 +34,7 @@ public class Field {
 			for (String className : foodCreatures) {
 				if(
 					this.fielddata[position.getX()][position.getY()] != null &&
-					this.fielddata[position.getX()][position.getY()].getClass().toString().equals(className)
+					this.fielddata[position.getX()][position.getY()].getClass().toString().equals("class " + className)
 				) { 
 					fields.push(this.fielddata[position.getX()][position.getY()]);
 				}
