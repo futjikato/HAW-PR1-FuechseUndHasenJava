@@ -1,11 +1,9 @@
 #Füchse und Hasen
 
-A simple simulation of different creatures on a field eating, spawn children and die at some point.
-
-This project is inspired by a lecture i recently attended.
-It was presented in ruby, which made me want to show that java is better
-
-So I started to rebuild the simple simulation and add a little bit of falvor to it.
+A simple simulation of different creatures on a field eating, spawn children and die at some point.<br>
+This project is inspired by a lecture i recently attended.<br>
+It was presented in ruby, which made me want to show that java is better.<br>
+So I started to rebuild the simple simulation and add a little bit of falvor to it.<br>
 
 ## How to get it running
 
@@ -17,9 +15,9 @@ In addition you need to add the lwjgl_util.jar as an external lib to make the 3d
 
 You can move the camera with the arrow keys 
 
-UP - Zoom In
-Down - Zoom Out
-Left - Move camera to the left
+UP - Zoom In<br>
+Down - Zoom Out<br>
+Left - Move camera to the left<br>
 Right - Move the camera to the right
 
 ## ToDo´s
