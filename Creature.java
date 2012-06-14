@@ -83,6 +83,7 @@ public abstract class Creature {
 	public abstract float[] getColor();
 	protected abstract String[] getFood();
 	protected abstract int getInitFoodLevel();
+	public abstract String getFieldCodeChar();
 	
 	protected void eat(Creature foodObj) throws Exception {
 		// do nothing on default

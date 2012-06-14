@@ -1,7 +1,5 @@
 public class Rabbit extends Creature {
 	
-	protected int spawnInterval = 2;
-	
 	public Rabbit(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
 	}
@@ -18,7 +16,7 @@ public class Rabbit extends Creature {
 
 	@Override
 	public int getMaxAge() {
-		return 3;
+		return 5;
 	}
 
 	@Override
@@ -45,11 +43,14 @@ public class Rabbit extends Creature {
 	@Override
 	public void spawnChild() throws Exception {
 		Position newPos = this.field.getRandomFreeNeightbor(this.pos);
-		spawnInterval--;
-		if(newPos != null && spawnInterval <= 0) {
-			this.spawnInterval = 2;
+		if(newPos != null && this.age >= 3) {
 			Rabbit child = new Rabbit(this.field, false, newPos);
 			Simulator.getInstance().addCreature(child);
 		}
+	}
+	
+	@Override
+	public String getFieldCodeChar() {
+		return "H";
 	}
 }

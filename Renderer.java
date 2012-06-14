@@ -204,6 +204,10 @@ public class Renderer {
 						return;
 					}
 					this.render(creatures);
+					
+					// this generate field has code
+					this.simulator.getField().printCode();
+					
 					this.lastFrame = this.getTime();
 				}
 			}

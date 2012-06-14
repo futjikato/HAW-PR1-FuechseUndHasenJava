@@ -165,4 +165,20 @@ public class Field {
 		
 		return retVal;
 	}
+	
+	public void printCode() {
+		String output = "";
+		
+		for (Creature[] inner : this.fielddata) {
+			for (Creature fieldContent : inner) {
+				if(fieldContent == null) {
+					output += "0";
+				} else {
+					output += fieldContent.getFieldCodeChar();
+				}
+			}
+		}
+		
+		System.out.println("Fieldcode : `" + output + "`");
+	}
 }

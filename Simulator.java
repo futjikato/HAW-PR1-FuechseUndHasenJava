@@ -92,4 +92,8 @@ public class Simulator {
 		}
 		return true;
 	}
+	
+	public Field getField() {
+		return this.battlefield;
+	}
 }

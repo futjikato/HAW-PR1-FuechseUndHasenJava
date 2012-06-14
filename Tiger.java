@@ -55,4 +55,8 @@ public class Tiger extends Creature {
 		}
 	}
 
+	@Override
+	public String getFieldCodeChar() {
+		return "T";
+	}
 }
