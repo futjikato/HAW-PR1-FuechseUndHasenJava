@@ -54,35 +54,35 @@ public class Renderer {
 	protected void drawCube(float size) {
 		GL11.glBegin(GL11.GL_QUADS);
 		
-		GL11.glVertex3f(size, size, -size); // Top Right Of The Quad (Top)
-		GL11.glVertex3f(-size, size, -size); // Top Left Of The Quad (Top)
-		GL11.glVertex3f(-size, size, size); // Bottom Left Of The Quad (Top)
-		GL11.glVertex3f(size, size, size); // Bottom Right Of The Quad (Top)
+		GL11.glVertex3f(size, 1, -size); // Top Right Of The Quad (Top)
+		GL11.glVertex3f(-size, 1, -size); // Top Left Of The Quad (Top)
+		GL11.glVertex3f(-size, 1, size); // Bottom Left Of The Quad (Top)
+		GL11.glVertex3f(size, 1, size); // Bottom Right Of The Quad (Top)
 
-		GL11.glVertex3f(size, -size, size); // Top Right Of The Quad (Bottom)
-		GL11.glVertex3f(-size, -size, size); // Top Left Of The Quad (Bottom)
-		GL11.glVertex3f(-size, -size, -size); // Bottom Left Of The Quad (Bottom)
-		GL11.glVertex3f(size, -size, -size); // Bottom Right Of The Quad (Bottom)
+		GL11.glVertex3f(size, -1, size); // Top Right Of The Quad (Bottom)
+		GL11.glVertex3f(-size, -1, size); // Top Left Of The Quad (Bottom)
+		GL11.glVertex3f(-size, -1, -size); // Bottom Left Of The Quad (Bottom)
+		GL11.glVertex3f(size, -1, -size); // Bottom Right Of The Quad (Bottom)
 
-		GL11.glVertex3f(size, size, size); // Top Right Of The Quad (Front)
-		GL11.glVertex3f(-size, size, size); // Top Left Of The Quad (Front)
-		GL11.glVertex3f(-size, -size, size); // Bottom Left Of The Quad (Front)
-		GL11.glVertex3f(size, -size, size); // Bottom Right Of The Quad (Front)
+		GL11.glVertex3f(size, 1, size); // Top Right Of The Quad (Front)
+		GL11.glVertex3f(-size, 1, size); // Top Left Of The Quad (Front)
+		GL11.glVertex3f(-size, -1, size); // Bottom Left Of The Quad (Front)
+		GL11.glVertex3f(size, -1, size); // Bottom Right Of The Quad (Front)
 
-		GL11.glVertex3f(size, -size, -size); // Bottom Left Of The Quad (Back)
-		GL11.glVertex3f(-size, -size, -size); // Bottom Right Of The Quad (Back)
-		GL11.glVertex3f(-size, size, -size); // Top Right Of The Quad (Back)
-		GL11.glVertex3f(size, size, -size); // Top Left Of The Quad (Back)
+		GL11.glVertex3f(size, -1, -size); // Bottom Left Of The Quad (Back)
+		GL11.glVertex3f(-size, -1, -size); // Bottom Right Of The Quad (Back)
+		GL11.glVertex3f(-size, 1, -size); // Top Right Of The Quad (Back)
+		GL11.glVertex3f(size, 1, -size); // Top Left Of The Quad (Back)
 
-		GL11.glVertex3f(-size, size, size); // Top Right Of The Quad (Left)
-		GL11.glVertex3f(-size, size, -size); // Top Left Of The Quad (Left)
-		GL11.glVertex3f(-size, -size, -size); // Bottom Left Of The Quad (Left)
-		GL11.glVertex3f(-size, -size, size); // Bottom Right Of The Quad (Left)
+		GL11.glVertex3f(-size, 1, size); // Top Right Of The Quad (Left)
+		GL11.glVertex3f(-size, 1, -size); // Top Left Of The Quad (Left)
+		GL11.glVertex3f(-size, -1, -size); // Bottom Left Of The Quad (Left)
+		GL11.glVertex3f(-size, -1, size); // Bottom Right Of The Quad (Left)
 
-		GL11.glVertex3f(size, size, -size); // Top Right Of The Quad (Right)
-		GL11.glVertex3f(size, size, size); // Top Left Of The Quad (Right)
-		GL11.glVertex3f(size, -size, size); // Bottom Left Of The Quad (Right)
-		GL11.glVertex3f(size, -size, -size); // Bottom Right Of The Quad (Right)
+		GL11.glVertex3f(size, 1, -size); // Top Right Of The Quad (Right)
+		GL11.glVertex3f(size, 1, size); // Top Left Of The Quad (Right)
+		GL11.glVertex3f(size, -1, size); // Bottom Left Of The Quad (Right)
+		GL11.glVertex3f(size, -1, -size); // Bottom Right Of The Quad (Right)
 		
 		GL11.glEnd();
 		GL11.glFlush();
@@ -116,7 +116,7 @@ public class Renderer {
 		this.moveTo(pos.getX(), pos.getY());
 		
 		// draw cubes
-		this.drawCube(0.5f);
+		this.drawCube(0.25f);
 	}
 	
 	public void drawCreatures(Stack<Creature> creatures) {
