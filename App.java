@@ -10,12 +10,13 @@ public class App {
 	public static void main(String[] args) {
 		// init all components we need
 		Field battlefield = new Field(50);
-		Simulator simulat = new Simulator(battlefield);
-		Renderer renderer = new Renderer(simulat, 500, 500); // fieldsize * 10px
+		Simulator simulat = Simulator.getInstance();
+		simulat.setField(battlefield);
+		Renderer renderer = new Renderer(500, 500); // fieldsize * 10px
 		
-		// add 10 tigers to the field
+		// add 20 tigers to the field
 		try {
-			simulat.populate("Tiger", 30);
+			simulat.populate("Tiger", 20);
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println("Failed to add tigers :(");

@@ -11,13 +11,19 @@ public class Simulator {
 	
 	protected static Simulator instance;
 	
-	public Simulator(Field battlefield){
-		this.battlefield = battlefield;
+	protected Simulator() {
 		Simulator.instance = this;
 	}
 	
 	public static Simulator getInstance() {
+		if(Simulator.instance == null) {
+			Simulator.instance = new Simulator();
+		}
 		return Simulator.instance;
+	}
+	
+	public void setField(Field battlefield) {
+		this.battlefield = battlefield;
 	}
 	
 	public void addCreature(Creature createure) {

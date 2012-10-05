@@ -8,7 +8,6 @@ public class Renderer {
 	
 	protected int width;
 	protected int height;
-	protected Simulator simulator;
 	protected boolean isRunning = false;
 	protected InputHandler input;
 	protected long lastFrame;
@@ -23,10 +22,9 @@ public class Renderer {
 	protected float camera_y = 120;
 	protected float camera_rotation = 0;
 	
-	public Renderer(Simulator simulator, int width, int height) {
+	public Renderer(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.simulator = simulator;
 		this.input = new InputHandler();
 		
 		this.init();
@@ -155,8 +153,8 @@ public class Renderer {
 		this.camera_rotation = this.input.handleRotation(this.camera_rotation);
 		
 		GL11.glLoadIdentity();
+		GL11.glRotatef(this.camera_rotation * 2, 0, 1, 0);
 		this.moveTo(this.camera_x, this.camera_y);
-		GL11.glRotatef(this.camera_rotation, 0, 0, 1);
 		
 		// update screen
 		Display.update();
@@ -224,7 +222,8 @@ public class Renderer {
 	public void start() {
 		
 		// render inital state
-		this.render(this.simulator.getCreatures());
+		Simulator sim = Simulator.getInstance();
+		this.render(sim.getCreatures());
 		this.lastFrame = this.getTime();
 		this.lastFPS = this.getTime();
 		
@@ -242,7 +241,7 @@ public class Renderer {
 				
 				Stack<Creature> creatures = null;
 				if(this.getGenerationDelta() > 1000) {
-					creatures = this.simulator.simulateOneStep();
+					creatures = sim.simulateOneStep();
 					if(creatures == null) {
 						System.out.println("-END- with error");
 						this.stop();
@@ -251,7 +250,7 @@ public class Renderer {
 					
 					this.lastGeneratione = this.getTime();
 				} else {
-					creatures = this.simulator.getCreatures();
+					creatures = sim.getCreatures();
 				}
 				
 				this.render(creatures);

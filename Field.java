@@ -116,7 +116,9 @@ public class Field {
 		Stack<Position> freeFields = new Stack<Position>();
 		
 		for (Position position : neighbors) {
-			if(this.isFieldFree(position)) freeFields.push(position);
+			if(this.isFieldFree(position)) {
+				freeFields.push(position);
+			}
 		}
 		
 		Collections.shuffle(freeFields);

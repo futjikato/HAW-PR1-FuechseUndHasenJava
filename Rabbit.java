@@ -42,6 +42,7 @@ public class Rabbit extends Creature {
 	
 	@Override
 	public void spawnChild() throws Exception {
+		//TODO fix me !
 		Position newPos = this.field.getRandomFreeNeightbor(this.pos);
 		if(newPos != null && this.age >= 3) {
 			Rabbit child = new Rabbit(this.field, false, newPos);
