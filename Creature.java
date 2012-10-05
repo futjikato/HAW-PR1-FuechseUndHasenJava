@@ -98,6 +98,10 @@ public abstract class Creature {
 		return this.alive;
 	}
 	
+	public int getAge() {
+		return this.age;
+	}
+	
 	public Position getPosition() {
 		return this.pos;
 	}

@@ -11,6 +11,25 @@ public class Rabbit extends Creature {
 			return false;
 		}
 		
+		// rabbits die when they are < 3 year old and no > 3 year old rabbit is a neightbor
+		if(this.age < 3) {
+			Position[] rabbitPos = this.field.getNeighborWithCreature(this.pos, this);
+			for(Position pos : rabbitPos) {
+				if(pos != null) {
+					Creature possibleParent = this.field.getCreatureFromPosition(pos);
+					if(possibleParent.getAge() > 3) {
+						return true;
+					}
+				} else {
+					// if null is found end of array
+					break;
+				}
+			}
+			
+			// return false if no > 3 "parent"
+			return false;
+		}
+		
 		return true;
 	}
 

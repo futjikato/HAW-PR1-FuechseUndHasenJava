@@ -111,6 +111,10 @@ public class Field {
 		return retArray;
 	}
 	
+	public Creature getCreatureFromPosition(Position pos) {
+		return this.fielddata[pos.x][pos.y];
+	}
+	
 	public Position getRandomFreeNeightbor(Position pos) {
 		Position[] neighbors = this.getNeighborPositions(pos);
 		Stack<Position> freeFields = new Stack<Position>();
@@ -135,7 +139,7 @@ public class Field {
 		int index = 0;
 		
 		for (Position position : source) {
-			if(this.fielddata[position.getX()][position.getY()].getClass().equals(cre.getClass())) {
+			if(this.fielddata[position.getX()][position.getY()] != null && this.fielddata[position.getX()][position.getY()].getClass().equals(cre.getClass())) {
 				retVal[index] = position;
 				index++;
 			}
