@@ -1,3 +1,4 @@
+package Simulation;
 public class Tiger extends Creature {
 	public Tiger(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
@@ -30,7 +31,7 @@ public class Tiger extends Creature {
 	
 	@Override
 	protected String[] getFood() {
-		return new String[]{"Rabbit"};
+		return new String[]{"Simulation.Rabbit"};
 	}
 	
 	@Override

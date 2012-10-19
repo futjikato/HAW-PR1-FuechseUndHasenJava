@@ -1,3 +1,4 @@
+package Simulation;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -131,6 +132,20 @@ public class Field {
 		} else {
 			return null;
 		}
+	}
+	
+	public Stack<Position> getRandomFreeNeightborArray(Position pos) {
+		Position[] neighbors = this.getNeighborPositions(pos);
+		Stack<Position> freeFields = new Stack<Position>();
+		
+		for (Position position : neighbors) {
+			if(this.isFieldFree(position)) {
+				freeFields.push(position);
+			}
+		}
+		
+		Collections.shuffle(freeFields);
+		return freeFields;
 	}
 	
 	public Position[] getNeighborWithCreature(Position pos, Creature cre) {

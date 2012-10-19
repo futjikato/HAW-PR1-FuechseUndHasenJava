@@ -1,3 +1,4 @@
+package Simulation;
 
 public class Position {
 	protected int x;

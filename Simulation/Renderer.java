@@ -1,3 +1,4 @@
+package Simulation;
 import java.util.Stack;
 
 import org.lwjgl.*;
@@ -153,7 +154,7 @@ public class Renderer {
 		this.camera_rotation = this.input.handleRotation(this.camera_rotation);
 		
 		GL11.glLoadIdentity();
-		GL11.glRotatef(this.camera_rotation * 2, 0, 1, 0);
+		GL11.glRotatef(this.camera_rotation, 0, 1, 0);
 		this.moveTo(this.camera_x, this.camera_y);
 		
 		// update screen

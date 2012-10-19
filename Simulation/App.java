@@ -1,3 +1,4 @@
+package Simulation;
 /**
  * @author moritzspindelhirn
  *
@@ -16,7 +17,7 @@ public class App {
 		
 		// add 20 tigers to the field
 		try {
-			simulat.populate("Tiger", 20);
+			simulat.populate("Simulation.Tiger", 20);
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println("Failed to add tigers :(");
@@ -24,7 +25,7 @@ public class App {
 		
 		// add 30 rabbits to the field
 		try {
-			simulat.populate("Rabbit", 30);
+			simulat.populate("Simulation.Rabbit", 30);
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println("Failed to add rabbits :(");

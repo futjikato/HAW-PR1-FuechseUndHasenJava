@@ -1,3 +1,4 @@
+package Simulation;
 public abstract class Creature {
 	
 	protected boolean alive = true;
