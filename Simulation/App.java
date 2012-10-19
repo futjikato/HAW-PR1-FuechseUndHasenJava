@@ -25,7 +25,7 @@ public class App {
 		
 		// add 30 rabbits to the field
 		try {
-			simulat.populate("Simulation.Rabbit", 30);
+			simulat.populate("Simulation.Rabbit", 40);
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println("Failed to add rabbits :(");

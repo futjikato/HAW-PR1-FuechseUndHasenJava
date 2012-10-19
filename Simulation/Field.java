@@ -55,37 +55,15 @@ public class Field {
 		return !(this.fielddata[pos.getX()][pos.getY()] instanceof Creature);
 	}
 	
+	/**
+	 * Improve me !
+	 * 
+	 * @param givenCreature
+	 * @param newPos
+	 */
 	public void moveCreature(Creature givenCreature, Position newPos) {
-		int x = 0;
-		boolean setNew = false;
-		boolean removed = false;
-		
-		loopend:
-		for (Creature[] inner : this.fielddata) {
-			int y = 0;
-			for (Creature creature : inner) {
-				
-				// remove from old pos
-				if(creature != null && creature.equals(givenCreature)) {
-					this.fielddata[x][y] = null;
-					removed = true;
-				}
-				
-				// set at new pos
-				if(x == newPos.getX() && y == newPos.getY()) {
-					this.fielddata[x][y] = givenCreature;
-					setNew = true;
-				}
-				
-				// break if done
-				if(setNew && removed) {
-					break loopend;
-				}
-				
-				y++;
-			}
-			x++;
-		}
+		this.fielddata[givenCreature.getPosition().getX()][givenCreature.getPosition().getY()] = null;
+		this.fielddata[newPos.getX()][newPos.getY()] = givenCreature;
 	}
 	
 	protected Position[] getNeighborPositions(Position pos) {

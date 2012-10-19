@@ -78,13 +78,13 @@ public class Simulator {
 			}
 			Collections.shuffle(freeList);
 			
-			for(int i = 0 ; i < number ; i++) {
+			for(int i = 0 ; i <= number ; i++) {
 				// get free positions from list
 				if(freeList.isEmpty()) {
 					throw new Exception("No more free positions on the field");
 				}
-				Position pos = freeList.get(0);
-				freeList.remove(0);
+				
+				Position pos = freeList.remove(0);
 				
 				// create instance of the class
 				Constructor<?>[] constructors = creatureClass.getDeclaredConstructors();

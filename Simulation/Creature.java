@@ -70,12 +70,12 @@ public abstract class Creature {
 			return false;
 		}
 		
+		// spawn child
+		this.spawnChild();
+		
 		// move creature
 		this.field.moveCreature(this, newPos);
 		this.pos = newPos;
-		
-		// spawn child
-		this.spawnChild();
 		
 		return true;
 	}
