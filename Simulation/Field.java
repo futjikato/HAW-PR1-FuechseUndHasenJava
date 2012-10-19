@@ -66,7 +66,7 @@ public class Field {
 		this.fielddata[newPos.getX()][newPos.getY()] = givenCreature;
 	}
 	
-	protected Position[] getNeighborPositions(Position pos) {
+	public Position[] getNeighborPositions(Position pos) {
 		Stack<Position> retVal = new Stack<Position>();
 		for(int i = -1 ; i <= 1 ; i++) {
 			int newX = pos.getX() + i;

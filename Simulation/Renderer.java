@@ -34,7 +34,7 @@ public class Renderer {
 	public void init() {
 		try {
 			Display.setDisplayMode(new DisplayMode(this.width,this.height));
-			Display.setTitle("FŸchse und Hasen - Java");
+			Display.setTitle("Fï¿½chse und Hasen - Java");
 			Display.create();
 		} catch (LWJGLException e) {
 			// TODO Auto-generated catch block
@@ -122,7 +122,7 @@ public class Renderer {
 		this.moveTo(pos.getX(), pos.getY());
 		
 		// draw cubes
-		this.drawCube(0.25f);
+		this.drawCube(0.5f);
 	}
 	
 	public void drawCreatures(Stack<Creature> creatures) {
@@ -241,7 +241,7 @@ public class Renderer {
 				}
 				
 				Stack<Creature> creatures = null;
-				if(this.getGenerationDelta() > 1000) {
+				if(this.getGenerationDelta() > 100) {
 					creatures = sim.simulateOneStep();
 					if(creatures == null) {
 						System.out.println("-END- with error");

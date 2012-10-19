@@ -65,6 +65,14 @@ public class Rabbit extends Creature {
 	
 	@Override
 	public void spawnChild() throws Exception {
+		Position[] neighbor = this.field.getNeighborPositions(this.pos);
+		for(Position n : neighbor) {
+			Creature content = this.field.getCreatureFromPosition(n);
+			if(content != null && content instanceof Tiger) {
+				return;
+			}
+		}
+		
 		//TODO fix me !
 		Stack<Position> newPos = this.field.getRandomFreeNeightborArray(this.pos);
 		if(newPos != null && newPos.size() > 2 && this.age >= 3) {
