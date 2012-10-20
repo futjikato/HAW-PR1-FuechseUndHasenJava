@@ -1,9 +1,13 @@
-package Simulation;
+package de.futjikato.javahasen.simulation;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.Stack;
 
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.GLU;
+
+import de.futjikato.javahasen.App;
 
 public class Renderer {
 	
@@ -23,18 +27,31 @@ public class Renderer {
 	protected float camera_y = 120;
 	protected float camera_rotation = 0;
 	
-	public Renderer(int width, int height) {
-		this.width = width;
-		this.height = height;
-		this.input = new InputHandler();
+	public Renderer() {
+		Field field = Simulator.getInstance().getField();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		Display.setResizable(true);
 		
+		// init window width
+		this.width = field.getSize() * 10;
+		if(this.width > dim.getWidth()) {
+			this.width = (int) dim.getWidth();
+		}
+		
+		// init window height
+		this.height = field.getSize() * 10;
+		if(this.height > dim.getHeight()) {
+			this.height = (int) dim.getHeight();
+		}
+		
+		this.input = new InputHandler();
 		this.init();
 	}
 	
 	public void init() {
 		try {
 			Display.setDisplayMode(new DisplayMode(this.width,this.height));
-			Display.setTitle("F�chse und Hasen - Java");
+			Display.setTitle("JavaHasen - Simulation");
 			Display.create();
 		} catch (LWJGLException e) {
 			// TODO Auto-generated catch block
@@ -100,13 +117,14 @@ public class Renderer {
 		
 		// move render pencil to 0/0
 		this.moveTo(0, 0);
+		int fieldSize = Simulator.getInstance().getField().getSize();
 		
 		GL11.glBegin(GL11.GL_QUADS);
 		
 			GL11.glVertex3f(0, -0.5f, 0); // far left edge
-			GL11.glVertex3f(50, -0.5f, 0); // near left edge
-			GL11.glVertex3f(50, -0.5f, 50); // near right edge
-			GL11.glVertex3f(0, -0.5f, 50); // far right edge
+			GL11.glVertex3f(fieldSize, -0.5f, 0); // near left edge
+			GL11.glVertex3f(fieldSize, -0.5f, fieldSize); // near right edge
+			GL11.glVertex3f(0, -0.5f, fieldSize); // far right edge
 		
 		GL11.glEnd();
 		GL11.glFlush();
@@ -138,9 +156,10 @@ public class Renderer {
 		GL11.glLoadIdentity();
 		
 		// set perspective
+		int fieldSize = Simulator.getInstance().getField().getSize();
 		this.moveTo(0, 0);
 		GL11.glRotatef(40, 1, 0, 0);
-		GL11.glTranslatef(0, 20, 0);
+		GL11.glTranslatef(0, (20/50*fieldSize), (-0.25f*fieldSize));
 		
 		// draw field
 		this.drawField();
@@ -184,9 +203,9 @@ public class Renderer {
 	 * 
 	 * @return milliseconds passed since last frame 
 	 */
-	public int getGenerationDelta() {
+	public long getGenerationDelta() {
 	    long time = getTime();
-	    int delta = (int) (time - this.lastGeneratione);
+	    long delta = (time - this.lastGeneratione);
 	 
 	    return delta;
 	}
@@ -235,8 +254,9 @@ public class Renderer {
 			
 			// render loop
 			while(this.isRunning) {
-				if(this.input.doClose()) {
+				if(Display.isCloseRequested()) {
 					this.isRunning = false;
+					App.getInstance().setNext(App.RUNFLAG_MENU);
 					break;
 				}
 				

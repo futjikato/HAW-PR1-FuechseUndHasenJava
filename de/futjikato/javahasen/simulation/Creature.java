@@ -1,4 +1,4 @@
-package Simulation;
+package de.futjikato.javahasen.simulation;
 public abstract class Creature {
 	
 	protected boolean alive = true;

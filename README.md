@@ -1,4 +1,4 @@
-#Füchse und Hasen
+#JavaHasen
 
 A simple simulation of different creatures on a field eating, spawn children and die at some point.<br>
 This project is inspired by a lecture i recently attended.<br>
@@ -11,6 +11,9 @@ This example uses [LWJGL](http://www.lwjgl.org) as the rendering engine.
 Its really simple [to make this work in Eclispe](http://www.lwjgl.org/wiki/index.php?title=Setting_Up_LWJGL_with_Eclipse).
 In addition you need to add the lwjgl_util.jar as an external lib to make the 3d stuff work :-)
 
+I´m also using the [Slick-Util](http://www.lwjgl.org/wiki/index.php?title=Slick-Util_Library_-_Introduction) library to load textures.
+It´s included in the repository and needs to be added as an external jar, too.
+
 ## Controls
 
 You can move the camera with the arrow keys 
@@ -20,12 +23,15 @@ Down - Zoom Out<br>
 Left - Move camera to the left<br>
 Right - Move the camera to the right
 
+There might be some mouse control right now but it is buggy and ugly.
+
 ## ToDo´s
 
+* Improve start menu ( Top priority ! )
 * Create more creatures
-* extend livecylcle to spawn new creatures
-* extend tiger to eat rabbits
-* extend tiger to die of hunger if he does not find rabbits ... it´s sad i know but live is hard
+* Add textures to simulation
+* Add options to configure simulation parameters
+* Improve camera movement and stuff....
 
 ## License ( [MIT](http://www.opensource.org/licenses/MIT) )
 

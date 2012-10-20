@@ -1,4 +1,4 @@
-package Simulation;
+package de.futjikato.javahasen.simulation;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -17,6 +17,10 @@ public class Field {
 	public Field(int size) {
 		this.size = size;
 		this.fielddata = new Creature[size][size];
+	}
+	
+	public int getSize() {
+		return this.size;
 	}
 	
 	public void setPosition(Creature creature, Position pos) {

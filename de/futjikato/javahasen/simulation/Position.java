@@ -1,4 +1,4 @@
-package Simulation;
+package de.futjikato.javahasen.simulation;
 
 public class Position {
 	protected int x;

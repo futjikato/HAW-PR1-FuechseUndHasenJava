@@ -1,4 +1,4 @@
-package Simulation;
+package de.futjikato.javahasen.simulation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;

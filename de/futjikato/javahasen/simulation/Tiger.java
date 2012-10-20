@@ -1,4 +1,4 @@
-package Simulation;
+package de.futjikato.javahasen.simulation;
 public class Tiger extends Creature {
 	public Tiger(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
@@ -31,7 +31,7 @@ public class Tiger extends Creature {
 	
 	@Override
 	protected String[] getFood() {
-		return new String[]{"Simulation.Rabbit"};
+		return new String[]{"de.futjikato.javahasen.simulation.Rabbit"};
 	}
 	
 	@Override
