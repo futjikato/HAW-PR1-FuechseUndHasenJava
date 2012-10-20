@@ -5,6 +5,8 @@ This project is inspired by a lecture i recently attended.<br>
 It was presented in ruby, which made me want to show that java is better.<br>
 So I started to rebuild the simple simulation and add a little bit of falvor to it.<br>
 
+![Screenshot](https://raw.github.com/futjikato/HAW-PR1-FuechseUndHasenJava/master/resources/javahasen_screen_mac.png "Screenshot of a running simulation")
+
 ## How to get it running
 
 This example uses [LWJGL](http://www.lwjgl.org) as the rendering engine.
