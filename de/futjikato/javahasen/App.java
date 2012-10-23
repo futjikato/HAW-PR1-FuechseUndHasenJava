@@ -1,7 +1,12 @@
 package de.futjikato.javahasen;
 
+import java.util.Collections;
+import java.util.Stack;
+
 import de.futjikato.javahasen.menu.MenuRenderer;
+import de.futjikato.javahasen.simulation.Creature;
 import de.futjikato.javahasen.simulation.Field;
+import de.futjikato.javahasen.simulation.Rabbit;
 import de.futjikato.javahasen.simulation.Renderer;
 import de.futjikato.javahasen.simulation.Simulator;
 
@@ -10,6 +15,8 @@ public class App {
 	protected static App instance;
 	
 	protected int startOnNext = 1; // start with menu
+	
+	protected int initalSickRabbits = 10;
 	
 	// constants
 	public static final int RUNFLAG_STOP = 0;
@@ -83,6 +90,26 @@ public class App {
 		// add 30 rabbits to the field
 		try {
 			simulat.populate("de.futjikato.javahasen.simulation.Rabbit", 60);
+			
+			Stack<Creature> creatures = simulat.getCreatures();
+			// collect all creatures of the given type
+			Stack<Creature> matches = new Stack<Creature>();
+			for(Creature testCrature : creatures) {
+				if(testCrature.getClass() == Rabbit.class) {
+					matches.add(testCrature);
+				}
+			}
+			Collections.shuffle(matches);
+			
+			// get a random rabbit and make it sick
+			for(int i = 0 ; i < this.initalSickRabbits ; i++) {
+				if(matches.size() == 0) {
+					break;
+				}
+				
+				Rabbit selected = (Rabbit)matches.pop();
+				selected.poison();
+			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println("Failed to add rabbits :(");

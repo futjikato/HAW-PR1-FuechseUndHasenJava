@@ -36,6 +36,24 @@ public class Simulator {
 		return (Stack<Creature>)this.creatures.clone();
 	}
 	
+	public Creature getRandomCreate(Class createClass) {
+		// collect all creatures of the given type
+		Stack<Creature> matches = new Stack<Creature>();
+		for(Creature testCrature : this.creatures) {
+			if(testCrature.getClass() == createClass) {
+				matches.add(testCrature);
+			}
+		}
+		
+		if(matches.size() == 0) {
+			return null;
+		}
+		
+		// shuffle and return random creature
+		Collections.shuffle(matches);
+		return matches.pop();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Stack<Creature> simulateOneStep() {
 		try {

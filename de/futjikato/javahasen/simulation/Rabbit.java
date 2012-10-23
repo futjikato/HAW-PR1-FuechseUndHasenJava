@@ -4,8 +4,14 @@ import java.util.Stack;
 
 public class Rabbit extends Creature {
 	
+	protected boolean poisoned;
+	
 	public Rabbit(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
+	}
+	
+	public void poison() {
+		this.poisoned = true;
 	}
 	
 	@Override
@@ -45,6 +51,12 @@ public class Rabbit extends Creature {
 	@Override
 	public float[] getColor() {
 		float[] rgba = { 0.1f , 0.9f , 1.0f };
+		
+		// change color if poisoned
+		if(this.poisoned) {
+			rgba[0] = 0.9f;
+		}
+		
 		return rgba;
 	}
 
@@ -77,6 +89,12 @@ public class Rabbit extends Creature {
 		Stack<Position> newPos = this.field.getRandomFreeNeightborArray(this.pos);
 		if(newPos != null && newPos.size() > 2 && this.age >= 3) {
 			Rabbit child = new Rabbit(this.field, false, newPos.firstElement());
+			
+			// posion child if parent is already affected
+			if(this.poisoned) {
+				child.poison();
+			}
+			
 			Simulator.getInstance().addCreature(child);
 		}
 	}
