@@ -94,6 +94,27 @@ public class Field {
 		return retArray;
 	}
 	
+	/**
+	 * Get all the neighbor fields that harbor a creature of the given type
+	 * 
+	 * @param pos The position
+	 * @param cre
+	 * @return Array of neighbor fields
+	 */
+	public Position[] getNeighborPositions(Position pos, Creature cre) {
+		Position[] source = this.getNeighborPositions(pos);
+		Position[] retVal = new Position[8];
+		int index = 0;
+		
+		for (Position position : source) {
+			if(this.fielddata[position.getX()][position.getY()] != null && this.fielddata[position.getX()][position.getY()].getClass().equals(cre.getClass())) {
+				retVal[index] = position;
+				index++;
+			}
+		}
+		return retVal;
+	}
+	
 	public Creature getCreatureFromPosition(Position pos) {
 		return this.fielddata[pos.x][pos.y];
 	}
@@ -128,20 +149,6 @@ public class Field {
 		
 		Collections.shuffle(freeFields);
 		return freeFields;
-	}
-	
-	public Position[] getNeighborWithCreature(Position pos, Creature cre) {
-		Position[] source = this.getNeighborPositions(pos);
-		Position[] retVal = new Position[8];
-		int index = 0;
-		
-		for (Position position : source) {
-			if(this.fielddata[position.getX()][position.getY()] != null && this.fielddata[position.getX()][position.getY()].getClass().equals(cre.getClass())) {
-				retVal[index] = position;
-				index++;
-			}
-		}
-		return retVal;
 	}
 	
 	public Position[] getAllFreePositions() {

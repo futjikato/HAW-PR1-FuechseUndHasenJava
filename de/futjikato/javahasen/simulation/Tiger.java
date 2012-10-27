@@ -42,7 +42,6 @@ public class Tiger extends Creature {
 	@Override 
 	protected void eat(Creature foodObj) throws Exception {
 		this.foodLevel += 1;
-		this.spawnChild();
 	}
 	
 	@Override

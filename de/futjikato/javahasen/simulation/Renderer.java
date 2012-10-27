@@ -140,7 +140,7 @@ public class Renderer {
 		this.moveTo(pos.getX(), pos.getY());
 		
 		// draw cubes
-		this.drawCube(0.5f);
+		this.drawCube(0.25f);
 	}
 	
 	public void drawCreatures(Stack<Creature> creatures) {

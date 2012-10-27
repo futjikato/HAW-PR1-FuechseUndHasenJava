@@ -4,14 +4,32 @@ import java.util.Stack;
 
 public class Rabbit extends Creature {
 	
-	protected boolean poisoned;
+	private boolean poisoned = false;
+	private boolean immune = false;
 	
 	public Rabbit(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
 	}
 	
 	public void poison() {
+		if(this.immune) {
+			return;
+		}
 		this.poisoned = true;
+	}
+	
+	public void immune() {
+		this.immune = true;
+	}
+	
+	private void infectNeighbor() {
+		Position[] rabbitPos = this.field.getNeighborPositions(this.pos, this);
+		Position neighborPos = rabbitPos[0];
+		
+		if(neighborPos != null) {
+			Rabbit neighbor = (Rabbit) this.field.getCreatureFromPosition(neighborPos);
+			neighbor.poison();
+		}
 	}
 	
 	@Override
@@ -21,9 +39,14 @@ public class Rabbit extends Creature {
 			return false;
 		}
 		
+		// infect a neighbor if their is one and the rabbit is poisoned
+		if(this.poisoned) {
+			this.infectNeighbor();
+		}
+		
 		// rabbits die when they are < 3 year old and no > 3 year old rabbit is a neightbor
 		if(this.age < 3) {
-			Position[] rabbitPos = this.field.getNeighborWithCreature(this.pos, this);
+			Position[] rabbitPos = this.field.getNeighborPositions(this.pos, this);
 			for(Position pos : rabbitPos) {
 				if(pos != null) {
 					Creature possibleParent = this.field.getCreatureFromPosition(pos);
@@ -45,6 +68,11 @@ public class Rabbit extends Creature {
 
 	@Override
 	public int getMaxAge() {
+		// poisoned rabbits die after 4 years
+		if(this.poisoned) {
+			return 4;
+		}
+		
 		return 5;
 	}
 
@@ -70,11 +98,6 @@ public class Rabbit extends Creature {
 		return 1;
 	}
 	
-	@Override 
-	protected void eat(Creature foodObj) {
-		
-	}
-	
 	@Override
 	public void spawnChild() throws Exception {
 		Position[] neighbor = this.field.getNeighborPositions(this.pos);
@@ -85,14 +108,18 @@ public class Rabbit extends Creature {
 			}
 		}
 		
-		//TODO fix me !
 		Stack<Position> newPos = this.field.getRandomFreeNeightborArray(this.pos);
 		if(newPos != null && newPos.size() > 2 && this.age >= 3) {
 			Rabbit child = new Rabbit(this.field, false, newPos.firstElement());
 			
-			// posion child if parent is already affected
+			// chance of posion child if parent is already inffected
 			if(this.poisoned) {
-				child.poison();
+				double rand = Math.random();
+				if(rand > 0.4) {
+					child.poison();
+				} else {
+					child.immune();
+				}
 			}
 			
 			Simulator.getInstance().addCreature(child);
