@@ -1,4 +1,4 @@
-#JavaHasen
+#JavaHasen 1.1
 
 A simple simulation of different creatures on a field eating, spawn children and die at some point.<br>
 This project is inspired by a lecture i recently attended.<br>
@@ -6,6 +6,12 @@ It was presented in ruby, which made me want to show that java is better.<br>
 So I started to rebuild the simple simulation and add a little bit of falvor to it.<br>
 
 ![Screenshot](https://raw.github.com/futjikato/HAW-PR1-FuechseUndHasenJava/master/resources/javahasen_screen_mac.png "Screenshot of a running simulation")
+
+### What´s new in 1.1
+
+I made the decision to add a version number and set this to 1.1 because I rewrote major parts of the simulation.
+In prior versions the field/position logic was really creepy and not really reliable.<br>
+Some parts are still old and dirty but the time has come to make performance and stability improvements. 
 
 ## How to get it running
 
@@ -29,7 +35,7 @@ There might be some mouse control right now but it is buggy and ugly.
 
 ## ToDo´s
 
-* Improve start menu ( Top priority ! )
+* Improve start menu
 * Create more creatures
 * Add textures to simulation
 * Add options to configure simulation parameters

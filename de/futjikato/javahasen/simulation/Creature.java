@@ -1,4 +1,8 @@
 package de.futjikato.javahasen.simulation;
+
+import java.util.Collections;
+import java.util.Stack;
+
 public abstract class Creature {
 	
 	protected boolean alive = true;
@@ -12,11 +16,6 @@ public abstract class Creature {
 	protected Position pos;
 	
 	public Creature(Field field, boolean randAge, Position pos) throws Exception {
-		
-		if(!(pos instanceof Position)) {
-			throw new Exception("Invalid Position");
-		}
-		
 		this.pos = pos;
 		field.setPosition(this, pos);
 		this.field = field;
@@ -42,15 +41,32 @@ public abstract class Creature {
 		 * 2) try to get a random position
 		 * 3) die
 		 */
-		String[] food = this.getFood();
+		Class[] food = this.getFood();
 		Position newPos = null;
 		if(food.length > 0) {
-			Creature eatable = this.field.getRandomNeightbor(this.pos, food);
-			if(eatable != null) {
-				eatable.die();
-				this.eat(eatable);
-				newPos = eatable.getPosition();
-			} else {
+			Stack<Position> neighbors = this.field.getNeighborPositions(this.pos);
+			
+			// search for eatable creatures in near fields
+			Collections.shuffle(neighbors);
+			eatloop:
+			while(!neighbors.empty()) {
+				Position testPos = neighbors.pop();
+				
+				// free field
+				if(testPos.isEmpty()) {
+					continue;
+				}
+				
+				for(Class eatClass : food) {
+					Creature eatCreature = testPos.getContent();
+					if(eatCreature.getClass().equals(food)) {
+						newPos = eatCreature.getPosition();
+						this.eat(eatCreature);
+						break eatloop;
+					}
+				}
+				
+				// nothing eatable found
 				this.foodLevel--;
 			}
 			
@@ -62,7 +78,9 @@ public abstract class Creature {
 		
 		if(newPos == null){
 			// get random free neighbor field
-			newPos = this.field.getRandomFreeNeightbor(this.pos);
+			Stack<Position> freeNei = this.field.getFreeNeightbors(this.pos);
+			Collections.shuffle(freeNei);
+			newPos = freeNei.pop();
 		}
 		
 		if(newPos == null){
@@ -74,15 +92,14 @@ public abstract class Creature {
 		this.spawnChild();
 		
 		// move creature
-		this.field.moveCreature(this, newPos);
-		this.pos = newPos;
+		this.pos.setNewPosition(newPos.getNewX(), newPos.getNewY());
 		
 		return true;
 	}
 	
 	public abstract int getMaxAge();
 	public abstract float[] getColor();
-	protected abstract String[] getFood();
+	protected abstract Class[] getFood();
 	protected abstract int getInitFoodLevel();
 	public abstract String getFieldCodeChar();
 	
@@ -92,7 +109,7 @@ public abstract class Creature {
 	
 	public void die() throws Exception {
 		this.alive = false;
-		this.field.removeCreature(this.pos);
+		this.field.removeCreature(this, this.pos);
 	}
 	
 	public boolean isAlive() {

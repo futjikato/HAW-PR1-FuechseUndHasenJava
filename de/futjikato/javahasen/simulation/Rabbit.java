@@ -1,5 +1,6 @@
 package de.futjikato.javahasen.simulation;
 
+import java.util.Collections;
 import java.util.Stack;
 
 public class Rabbit extends Creature {
@@ -12,10 +13,10 @@ public class Rabbit extends Creature {
 	}
 	
 	public void poison() {
-		if(this.immune) {
-			return;
-		}
-		this.poisoned = true;
+//		if(this.immune) {
+//			return;
+//		}
+//		this.poisoned = true;
 	}
 	
 	public void immune() {
@@ -23,8 +24,13 @@ public class Rabbit extends Creature {
 	}
 	
 	private void infectNeighbor() {
-		Position[] rabbitPos = this.field.getNeighborPositions(this.pos, this);
-		Position neighborPos = rabbitPos[0];
+		Stack<Position> rabbitPos = this.field.getNeighborPositions(this.pos, this);
+		
+		Position neighborPos = null;
+		if(rabbitPos.size() > 0) {
+			Collections.shuffle(rabbitPos);
+			neighborPos = rabbitPos.pop();
+		}
 		
 		if(neighborPos != null) {
 			Rabbit neighbor = (Rabbit) this.field.getCreatureFromPosition(neighborPos);
@@ -46,16 +52,21 @@ public class Rabbit extends Creature {
 		
 		// rabbits die when they are < 3 year old and no > 3 year old rabbit is a neightbor
 		if(this.age < 3) {
-			Position[] rabbitPos = this.field.getNeighborPositions(this.pos, this);
-			for(Position pos : rabbitPos) {
-				if(pos != null) {
+			Stack<Position> rabbitPos = this.field.getNeighborPositions(this.pos, this);
+			
+			if(rabbitPos.size() > 0) {
+				while (!rabbitPos.empty()) {
+					Position pos = rabbitPos.pop();
 					Creature possibleParent = this.field.getCreatureFromPosition(pos);
+					
+					// validate that getNeighborPositions worked correct
+					if(possibleParent == null) {
+						throw new Exception("getNeighborPositions failed and delivered an empty position !");
+					}
+					
 					if(possibleParent.getAge() > 3) {
 						return true;
 					}
-				} else {
-					// if null is found end of array
-					break;
 				}
 			}
 			
@@ -100,17 +111,19 @@ public class Rabbit extends Creature {
 	
 	@Override
 	public void spawnChild() throws Exception {
-		Position[] neighbor = this.field.getNeighborPositions(this.pos);
-		for(Position n : neighbor) {
+		Stack<Position> neighbor = this.field.getNeighborPositions(this.pos);
+		while(!neighbor.empty()) {
+			Position n = neighbor.pop();
 			Creature content = this.field.getCreatureFromPosition(n);
 			if(content != null && content instanceof Tiger) {
 				return;
 			}
 		}
 		
-		Stack<Position> newPos = this.field.getRandomFreeNeightborArray(this.pos);
+		Stack<Position> newPos = this.field.getFreeNeightbors(this.pos);
 		if(newPos != null && newPos.size() > 2 && this.age >= 3) {
-			Rabbit child = new Rabbit(this.field, false, newPos.firstElement());
+			Collections.shuffle(newPos);
+			Rabbit child = new Rabbit(this.field, false, newPos.pop());
 			
 			// chance of posion child if parent is already inffected
 			if(this.poisoned) {

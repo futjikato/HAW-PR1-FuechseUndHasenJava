@@ -1,4 +1,8 @@
 package de.futjikato.javahasen.simulation;
+
+import java.util.Collections;
+import java.util.Stack;
+
 public class Tiger extends Creature {
 	public Tiger(Field field, boolean randAge, Position pos) throws Exception {
 		super(field, randAge, pos);
@@ -15,7 +19,7 @@ public class Tiger extends Creature {
 	}
 	
 	public String toString() {
-		return "Tiger Pos(" + this.pos.getX() + "/" + this.pos.getY() + ") Age:" + this.age;
+		return "Tiger Pos(" + this.pos.getNewX() + "/" + this.pos.getNewY() + ") Age:" + this.age;
 	}
 	
 	@Override
@@ -29,9 +33,10 @@ public class Tiger extends Creature {
 		return rgba;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
-	protected String[] getFood() {
-		return new String[]{"de.futjikato.javahasen.simulation.Rabbit"};
+	protected Class[] getFood() {
+		return new Class[]{Rabbit.class};
 	}
 	
 	@Override
@@ -46,7 +51,7 @@ public class Tiger extends Creature {
 	
 	@Override
 	public void spawnChild() throws Exception {
-		Position[] neighbor = this.field.getNeighborPositions(this.pos);
+		Stack<Position> neighbor = this.field.getNeighborPositions(this.pos);
 		for(Position n : neighbor) {
 			Creature content = this.field.getCreatureFromPosition(n);
 			if(content != null && content instanceof Tiger) {
@@ -62,9 +67,10 @@ public class Tiger extends Creature {
 			return;
 		}
 		
-		Position newPos = this.field.getRandomFreeNeightbor(this.pos);
-		if(newPos != null) {
-			Tiger child = new Tiger(this.field, false, newPos);
+		Stack<Position> newPos = this.field.getFreeNeightbors(this.pos);
+		if(newPos.size() > 0) {
+			Collections.shuffle(newPos);
+			Tiger child = new Tiger(this.field, false, newPos.pop());
 			Simulator.getInstance().addCreature(child);
 		}
 	}

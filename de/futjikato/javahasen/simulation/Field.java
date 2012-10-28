@@ -1,7 +1,6 @@
 package de.futjikato.javahasen.simulation;
-import java.util.Collections;
-import java.util.Stack;
 
+import java.util.Stack;
 
 public class Field {
 	
@@ -23,131 +22,78 @@ public class Field {
 		return this.size;
 	}
 	
-	public void setPosition(Creature creature, Position pos) {
-		this.fielddata[pos.getX()][pos.getY()] = creature;
-	}
-	
-	public void removeCreature(Position pos) {
-		this.fielddata[pos.getX()][pos.getY()] = null;
-	}
-	
-	public Creature getRandomNeightbor(Position pos, String[] foodCreatures) {
-		Position[] neighbors = this.getNeighborPositions(pos);
-		Stack<Creature> fields = new Stack<Creature>();
-		
-		for (Position position : neighbors) {
-			for (String className : foodCreatures) {
-				if(
-					this.fielddata[position.getX()][position.getY()] != null &&
-					this.fielddata[position.getX()][position.getY()].getClass().toString().equals("class " + className)
-				) { 
-					fields.push(this.fielddata[position.getX()][position.getY()]);
-				}
-				break;
-			}
+	public void setPosition(Creature creature, Position pos) throws Exception {
+		// check if field is empty
+		if(this.fielddata[pos.getNewX()][pos.getNewY()] != null) {
+			throw new Exception("Cannot set creature to already filled position");
 		}
 		
-		Collections.shuffle(fields);
-		if(fields.size() > 0) {
-			return fields.pop();
-		} else {
-			return null;
+		this.fielddata[pos.getNewX()][pos.getNewY()] = creature;
+	}
+	
+	public void removeCreature(Creature creature, Position pos) throws Exception {
+		// check if create is on given position
+		if(this.fielddata[pos.getNewX()][pos.getNewY()] != creature) {
+			throw new Exception("Cannot remove creature from position. Wrong position given.");
 		}
+		
+		this.fielddata[pos.getNewX()][pos.getNewY()] = null;
 	}
 	
 	public boolean isFieldFree(Position pos) {
-		return !(this.fielddata[pos.getX()][pos.getY()] instanceof Creature);
+		return this.fielddata[pos.getNewX()][pos.getNewY()] == null;
 	}
 	
-	/**
-	 * Improve me !
-	 * 
-	 * @param givenCreature
-	 * @param newPos
-	 */
-	public void moveCreature(Creature givenCreature, Position newPos) {
-		this.fielddata[givenCreature.getPosition().getX()][givenCreature.getPosition().getY()] = null;
-		this.fielddata[newPos.getX()][newPos.getY()] = givenCreature;
-	}
-	
-	public Position[] getNeighborPositions(Position pos) {
+	public Stack<Position> getNeighborPositions(Position pos) {
 		Stack<Position> retVal = new Stack<Position>();
 		for(int i = -1 ; i <= 1 ; i++) {
-			int newX = pos.getX() + i;
+			int newX = pos.getNewX() + i;
 			if(newX >= this.size || newX < 0) continue;
 			for(int j = -1 ; j <= 1 ; j++) {
-				int newY = pos.getY() + j;
+				int newY = pos.getNewY() + j;
 				if(newY >= this.size || newY < 0 || (i == 0 && j == 0)) continue;
-				Position testpos = new Position(newX,newY);
+				Position testpos = new Position(newX, newY, this.fielddata[newX][newY]);
 				retVal.push(testpos);
 			}
 		}
 		
-		//TODO improve this shit
-		Position[] retArray = new Position[retVal.size()];
-		int index = 0;
-		while(!retVal.empty()) {
-			retArray[index] = retVal.pop();
-			index++;
-		}
-		
-		return retArray;
-	}
-	
-	/**
-	 * Get all the neighbor fields that harbor a creature of the given type
-	 * 
-	 * @param pos The position
-	 * @param cre
-	 * @return Array of neighbor fields
-	 */
-	public Position[] getNeighborPositions(Position pos, Creature cre) {
-		Position[] source = this.getNeighborPositions(pos);
-		Position[] retVal = new Position[8];
-		int index = 0;
-		
-		for (Position position : source) {
-			if(this.fielddata[position.getX()][position.getY()] != null && this.fielddata[position.getX()][position.getY()].getClass().equals(cre.getClass())) {
-				retVal[index] = position;
-				index++;
-			}
-		}
 		return retVal;
 	}
 	
-	public Creature getCreatureFromPosition(Position pos) {
-		return this.fielddata[pos.x][pos.y];
+	protected void moveCreature(int oldX, int oldY, int newX, int newY, Creature content) throws Exception {
+		// Check if old field is no empty
+		Creature temp = this.fielddata[oldX][oldY];
+		if(temp == null) {
+			throw new Exception("No creature found at old position");
+		}
+		
+		// check if given creature is really on that field
+		if(!temp.equals(content)) {
+			throw new Exception("Invalid creature found at old position");
+		}
+		
+		// Check that new field is empty
+		Creature atNew = this.fielddata[newX][newY];
+		if(atNew != null) {
+			throw new Exception("Target field is not empty");
+		}
+		
+		// make changes if everything is fine
+		this.fielddata[oldX][oldY] = null;
+		this.fielddata[newX][newY] = temp;
 	}
 	
-	public Position getRandomFreeNeightbor(Position pos) {
-		Position[] neighbors = this.getNeighborPositions(pos);
+	public Stack<Position> getFreeNeightbors(Position pos) {
+		Stack<Position> neighbors = this.getNeighborPositions(pos);
 		Stack<Position> freeFields = new Stack<Position>();
 		
-		for (Position position : neighbors) {
-			if(this.isFieldFree(position)) {
+		while (!neighbors.empty()) {
+			Position position = neighbors.pop();
+			if(position.isEmpty()) {
 				freeFields.push(position);
 			}
 		}
 		
-		Collections.shuffle(freeFields);
-		if(freeFields.size() > 0) {
-			return freeFields.pop();
-		} else {
-			return null;
-		}
-	}
-	
-	public Stack<Position> getRandomFreeNeightborArray(Position pos) {
-		Position[] neighbors = this.getNeighborPositions(pos);
-		Stack<Position> freeFields = new Stack<Position>();
-		
-		for (Position position : neighbors) {
-			if(this.isFieldFree(position)) {
-				freeFields.push(position);
-			}
-		}
-		
-		Collections.shuffle(freeFields);
 		return freeFields;
 	}
 	
@@ -164,7 +110,7 @@ public class Field {
 			for (Creature fieldContent : inner) {
 				// collect all free fields
 				if(fieldContent == null) {
-					retVal[index] = new Position(x, y);
+					retVal[index] = new Position(x, y, null);
 					index++;
 				}
 				y++;

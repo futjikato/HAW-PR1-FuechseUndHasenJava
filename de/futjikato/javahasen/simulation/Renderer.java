@@ -11,21 +11,23 @@ import de.futjikato.javahasen.App;
 
 public class Renderer {
 	
-	protected int width;
-	protected int height;
-	protected boolean isRunning = false;
-	protected InputHandler input;
-	protected long lastFrame;
-	protected long lastGeneratione;
-	protected long lastFPS;
-	protected int fps = 0;
+	private int width;
+	private int height;
+	private boolean isRunning = false;
+	private InputHandler input;
+	private long lastFrame;
+	private long lastGeneratione;
+	private long lastFPS;
+	private int fps = 0;
 	
-	protected float cx = 0;
-	protected float cy = 0;
+	private float cx = 0;
+	private float cy = 0;
 	
-	protected float camera_x = 25;
-	protected float camera_y = 120;
-	protected float camera_rotation = 0;
+	private float camera_x = 25;
+	private float camera_y = 120;
+	private float camera_rotation = 0;
+	
+	private int stepInterval = 1000;
 	
 	public Renderer() {
 		Field field = Simulator.getInstance().getField();
@@ -131,13 +133,25 @@ public class Renderer {
 	}
 	
 	public void drawCreature(Creature creature) {
+		
+		// do not draw dead animals
+		if(!creature.isAlive()) {
+			return;
+		}
+		
 		// set the color of the quad (R,G,B)
 		float[] rgba = creature.getColor();
 		GL11.glColor3f(rgba[0], rgba[1], rgba[2]);
 			
-		// move to the right position
+		// get delta 
+		float progress = (float)this.getGenerationDelta() / this.stepInterval;
+		
+		// get current position in animation
 		Position pos = creature.pos;
-		this.moveTo(pos.getX(), pos.getY());
+		float animX = pos.getLastX() + ((pos.getNewX() - pos.getLastX()) * progress);
+		float animY = pos.getLastY() + ((pos.getNewY() - pos.getLastY()) * progress);
+		
+		this.moveTo(animX, animY);
 		
 		// draw cubes
 		this.drawCube(0.25f);
@@ -192,7 +206,7 @@ public class Renderer {
 	 */
 	public int getDelta() {
 	    long time = getTime();
-	    int delta = (int) (time - lastFrame);
+	    int delta = (int) (time - this.lastFrame);
 	 
 	    return delta;
 	}
@@ -239,6 +253,7 @@ public class Renderer {
 		this.cy = (y - 120);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void start() {
 		
 		// render inital state
@@ -261,8 +276,14 @@ public class Renderer {
 				}
 				
 				Stack<Creature> creatures = null;
-				if(this.getGenerationDelta() > 100) {
-					creatures = sim.simulateOneStep();
+				if(this.getGenerationDelta() > this.stepInterval) {
+					
+					boolean succ = sim.nextStep();
+					if(!succ) {
+						throw new Exception("Something went wrong while generating the next generation. Stop simulation");
+					}
+					
+					creatures = (Stack<Creature>) sim.getCreatures().clone();
 					if(creatures == null) {
 						System.out.println("-END- with error");
 						this.stop();
@@ -279,7 +300,9 @@ public class Renderer {
 		} catch ( Exception e ) {
 			// if something went wrong make a clean quit
 			this.isRunning = false;
-			System.out.println(e);
+			App.getInstance().setNext(App.RUNFLAG_STOP);
+			
+			System.out.println("Stopping simulation. Error in render loop.");
 		}
 		
 		Display.destroy();
