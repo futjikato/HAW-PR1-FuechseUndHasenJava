@@ -19,7 +19,7 @@ This example uses [LWJGL](http://www.lwjgl.org) as the rendering engine.
 Its really simple [to make this work in Eclispe](http://www.lwjgl.org/wiki/index.php?title=Setting_Up_LWJGL_with_Eclipse).
 In addition you need to add the lwjgl_util.jar as an external lib to make the 3d stuff work :-)
 
-I´m also using the [Slick-Util](http://www.lwjgl.org/wiki/index.php?title=Slick-Util_Library_-_Introduction) library to load textures.
+I´m also using the [Slick-Util](http://www.slick2d.org/) library ( updated in 1.1 so watch out here ! ) to load textures.
 It´s included in the repository and needs to be added as an external jar, too.
 
 ## Controls
