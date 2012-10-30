@@ -36,6 +36,11 @@ public abstract class Creature {
 	public abstract void spawnChild() throws Exception;
 	
 	public boolean process() throws Exception {
+		
+		if(!this.isAlive()) {
+			return false;
+		}
+		
 		this.age++;
 		if(this.age > this.getMaxAge()) {
 			this.die();
@@ -66,9 +71,15 @@ public abstract class Creature {
 				
 				for(Class eatClass : food) {
 					Creature eatCreature = testPos.getContent();
-					if(eatCreature.getClass().equals(food)) {
+					if(eatCreature.getClass().equals(eatClass)) {
+						// move to food source
 						newPos = eatCreature.getPosition();
+						// consume
 						this.eat(eatCreature);
+						// remove eaten one from field
+						eatCreature.die();
+						
+						// break eating loop
 						break eatloop;
 					}
 				}

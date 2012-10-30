@@ -27,7 +27,7 @@ public class Renderer {
 	private float camera_y = 120;
 	private float camera_rotation = 0;
 	
-	private int stepInterval = 1000;
+	private int stepInterval = 100;
 	
 	public Renderer() {
 		Field field = Simulator.getInstance().getField();
