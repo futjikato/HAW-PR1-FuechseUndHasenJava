@@ -53,7 +53,7 @@ public class Tiger extends Creature {
 	public void spawnChild() throws Exception {
 		Stack<Position> neighbor = this.field.getNeighborPositions(this.pos);
 		for(Position n : neighbor) {
-			Creature content = this.field.getCreatureFromPosition(n);
+			Creature content = n.getContent();
 			if(content != null && content instanceof Tiger) {
 				return;
 			}

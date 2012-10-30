@@ -27,10 +27,6 @@ public class Position {
 		return this.endX;
 	}
 
-	public void setX(int x) {
-		this.endX = x;
-	}
-
 	public int getLastY() {
 		return this.y;
 	}
@@ -39,7 +35,7 @@ public class Position {
 		return this.endY;
 	}
 
-	public void setNewPosition(int x, int y) throws Exception {
+	public Position setNewPosition(int x, int y) throws Exception {
 		// reached last position
 		this.reachedNewPosition();
 		
@@ -49,15 +45,36 @@ public class Position {
 		// set new destination
 		this.endX = x;
 		this.endY = y;
+		
+		// enable chaining
+		return this;
 	}
 	
-	protected void reachedNewPosition() {
+	protected Position reachedNewPosition() {
 		this.y = this.endY;
 		this.x = this.endX;
+		
+		return this;
 	}
 	
 	public Creature getContent() {
 		return this.content;
+	}
+	
+	public Position setContent(Creature content) throws Exception {
+		Field field = Simulator.getInstance().getField();
+		
+		// may remove old content from field
+		if(this.content != null) {
+			field.removeCreature(this.content, this);
+		}
+		
+		this.content = content;
+		
+		// set new content onto the field
+		field.setPosition(content, this);
+		
+		return this;
 	}
 	
 	protected void updateContent() {
@@ -66,5 +83,16 @@ public class Position {
 	
 	protected boolean isEmpty() {
 		return this.content == null;
+	}
+
+	/**
+	 * debugging purpose
+	 */
+	public void verify() throws Exception {
+		Field field = Simulator.getInstance().getField();
+		
+		if(!field.verify(this)) {
+			throw new Exception("Invalid position");
+		}
 	}
 }

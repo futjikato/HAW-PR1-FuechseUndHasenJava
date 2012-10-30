@@ -22,7 +22,11 @@ public class Field {
 		return this.size;
 	}
 	
-	public void setPosition(Creature creature, Position pos) throws Exception {
+	protected boolean verify(Position pos) {
+		return (pos.getContent().equals(this.fielddata[pos.getNewX()][pos.getNewY()]));
+	}
+	
+	protected void setPosition(Creature creature, Position pos) throws Exception {
 		// check if field is empty
 		if(this.fielddata[pos.getNewX()][pos.getNewY()] != null) {
 			throw new Exception("Cannot set creature to already filled position");
@@ -31,17 +35,13 @@ public class Field {
 		this.fielddata[pos.getNewX()][pos.getNewY()] = creature;
 	}
 	
-	public void removeCreature(Creature creature, Position pos) throws Exception {
+	protected void removeCreature(Creature creature, Position pos) throws Exception {
 		// check if create is on given position
 		if(this.fielddata[pos.getNewX()][pos.getNewY()] != creature) {
 			throw new Exception("Cannot remove creature from position. Wrong position given.");
 		}
 		
 		this.fielddata[pos.getNewX()][pos.getNewY()] = null;
-	}
-	
-	public boolean isFieldFree(Position pos) {
-		return this.fielddata[pos.getNewX()][pos.getNewY()] == null;
 	}
 	
 	public Stack<Position> getNeighborPositions(Position pos) {
@@ -97,9 +97,9 @@ public class Field {
 		return freeFields;
 	}
 	
-	public Position[] getAllFreePositions() {
+	public Stack<Position> getAllFreePositions() {
 		// create array for maximum amount of positions
-		Position[] retVal = new Position[this.size*this.size];
+		Stack<Position> retVal = new Stack<Position>();
 		
 		int index = 0;
 		int x = 0;
@@ -110,7 +110,7 @@ public class Field {
 			for (Creature fieldContent : inner) {
 				// collect all free fields
 				if(fieldContent == null) {
-					retVal[index] = new Position(x, y, null);
+					retVal.push(new Position(x, y, null));
 					index++;
 				}
 				y++;

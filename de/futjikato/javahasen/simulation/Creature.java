@@ -16,8 +16,15 @@ public abstract class Creature {
 	protected Position pos;
 	
 	public Creature(Field field, boolean randAge, Position pos) throws Exception {
-		this.pos = pos;
-		field.setPosition(this, pos);
+		try {
+			pos.setContent(this);
+			this.pos = pos;
+			pos.verify();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
 		this.field = field;
 		this.foodLevel = this.getInitFoodLevel();
 		
@@ -79,20 +86,21 @@ public abstract class Creature {
 		if(newPos == null){
 			// get random free neighbor field
 			Stack<Position> freeNei = this.field.getFreeNeightbors(this.pos);
+			
+			if(freeNei.empty()) {
+				this.die();
+				return false;
+			}
+			
 			Collections.shuffle(freeNei);
 			newPos = freeNei.pop();
 		}
 		
-		if(newPos == null){
-			this.die();
-			return false;
-		}
+		// move creature
+		this.pos.setNewPosition(newPos.getNewX(), newPos.getNewY());
 		
 		// spawn child
 		this.spawnChild();
-		
-		// move creature
-		this.pos.setNewPosition(newPos.getNewX(), newPos.getNewY());
 		
 		return true;
 	}

@@ -24,17 +24,18 @@ public class Rabbit extends Creature {
 	}
 	
 	private void infectNeighbor() {
-		Stack<Position> rabbitPos = this.field.getNeighborPositions(this.pos, this);
+		Stack<Position> rabbitPos = this.field.getNeighborPositions(this.pos);
+		Collections.shuffle(rabbitPos);
 		
-		Position neighborPos = null;
-		if(rabbitPos.size() > 0) {
-			Collections.shuffle(rabbitPos);
-			neighborPos = rabbitPos.pop();
-		}
-		
-		if(neighborPos != null) {
-			Rabbit neighbor = (Rabbit) this.field.getCreatureFromPosition(neighborPos);
-			neighbor.poison();
+		while(!rabbitPos.empty()) {
+			Position singlePos = rabbitPos.pop();
+			
+			if(!singlePos.isEmpty() && singlePos.getContent() instanceof Rabbit) {
+				Rabbit neiRab = (Rabbit) singlePos.getContent();
+				
+				neiRab.poison();
+				return;
+			}
 		}
 	}
 	
@@ -52,26 +53,18 @@ public class Rabbit extends Creature {
 		
 		// rabbits die when they are < 3 year old and no > 3 year old rabbit is a neightbor
 		if(this.age < 3) {
-			Stack<Position> rabbitPos = this.field.getNeighborPositions(this.pos, this);
+			Stack<Position> neighborPositions = this.field.getNeighborPositions(this.pos);
+			int rabbitCount = 0;
 			
-			if(rabbitPos.size() > 0) {
-				while (!rabbitPos.empty()) {
-					Position pos = rabbitPos.pop();
-					Creature possibleParent = this.field.getCreatureFromPosition(pos);
-					
-					// validate that getNeighborPositions worked correct
-					if(possibleParent == null) {
-						throw new Exception("getNeighborPositions failed and delivered an empty position !");
-					}
-					
-					if(possibleParent.getAge() > 3) {
-						return true;
-					}
+			while(!neighborPositions.empty()) {
+				Position testPos = neighborPositions.pop();
+				
+				if(!testPos.isEmpty() && testPos.getContent() instanceof Rabbit && testPos.getContent().getAge() > 3) {
+					rabbitCount++;
 				}
 			}
 			
-			// return false if no > 3 "parent"
-			return false;
+			return (rabbitCount > 0);
 		}
 		
 		return true;
@@ -99,9 +92,10 @@ public class Rabbit extends Creature {
 		return rgba;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	protected String[] getFood() {
-		return new String[]{};
+	protected Class[] getFood() {
+		return new Class[]{};
 	}
 	
 	@Override
@@ -114,7 +108,7 @@ public class Rabbit extends Creature {
 		Stack<Position> neighbor = this.field.getNeighborPositions(this.pos);
 		while(!neighbor.empty()) {
 			Position n = neighbor.pop();
-			Creature content = this.field.getCreatureFromPosition(n);
+			Creature content = n.getContent();
 			if(content != null && content instanceof Tiger) {
 				return;
 			}

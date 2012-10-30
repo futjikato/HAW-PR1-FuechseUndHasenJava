@@ -110,11 +110,7 @@ public class Simulator {
 			
 			// randomize free positions
 			// and do it the RIGHT way :-) http://blog.ryanrampersad.com/2012/03/03/more-on-shuffling-an-array-correctly/
-			Position[] freeArray = this.battlefield.getAllFreePositions();
-			ArrayList<Position> freeList = new ArrayList<Position>();
-			for (Position position : freeArray) {
-				freeList.add(position);
-			}
+			Stack<Position> freeList = this.battlefield.getAllFreePositions();
 			Collections.shuffle(freeList);
 			
 			for(int i = 0 ; i <= number ; i++) {
@@ -123,7 +119,7 @@ public class Simulator {
 					throw new Exception("No more free positions on the field");
 				}
 				
-				Position pos = freeList.remove(0);
+				Position pos = freeList.pop();
 				
 				// create instance of the class
 				Constructor<?>[] constructors = creatureClass.getDeclaredConstructors();
