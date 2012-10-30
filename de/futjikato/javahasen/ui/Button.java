@@ -70,16 +70,16 @@ public abstract class Button {
 		GL11.glBegin(GL11.GL_QUADS);
 	
 		      GL11.glVertex2f(0, 0);
-		      GL11.glTexCoord2f(0, 0);
-		      
-		      GL11.glVertex2f(this.getWidth(), 0);
 		      GL11.glTexCoord2f(1, 0);
 		      
-		      GL11.glVertex2f(this.getWidth(), this.getHeight());
+		      GL11.glVertex2f(this.getWidth(), 0);
 		      GL11.glTexCoord2f(1, 1);
 		      
-		      GL11.glVertex2f(0, this.getHeight());
+		      GL11.glVertex2f(this.getWidth(), this.getHeight());
 		      GL11.glTexCoord2f(0, 1);
+		      
+		      GL11.glVertex2f(0, this.getHeight());
+		      GL11.glTexCoord2f(0, 0);
 		
 		GL11.glEnd();
 		
