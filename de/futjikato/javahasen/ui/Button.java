@@ -5,6 +5,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 
+import de.futjikato.javahasen.RendererException;
+
 public abstract class Button {
 	
 	protected boolean mouseHovering = false;
@@ -53,12 +55,12 @@ public abstract class Button {
 		return (this.isHover() && Mouse.isButtonDown(0));
 	}
 
-	public void draw() throws Exception {
+	public void draw() throws RendererException {
 		Texture texture = this.getTexture();
 		
 		// fetch loading error
 		if(texture == null) {
-			throw new Exception("Unable to load Texture");
+			throw new RendererException("Unable to load Texture");
 		}
 		
 		GL11.glPushMatrix();

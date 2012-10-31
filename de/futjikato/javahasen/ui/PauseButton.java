@@ -8,40 +8,22 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import de.futjikato.javahasen.App;
-import de.futjikato.javahasen.RendererException;
-import de.futjikato.javahasen.menu.MenuRenderer;
+import de.futjikato.javahasen.Renderer;
 
-public class PlayButton extends Button {
+public class PauseButton extends Button {
 
 	protected int x;
 	protected int y;
 	
-	public PlayButton(int x, int y) {
+	public PauseButton(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-
-	@Override
-	public void onClick() {
-		// stop menu
-		try {
-			MenuRenderer.getInstance().stop();
-			
-			// say app to go to the simulation after closing menu
-			App.getInstance().setNext(App.RUNFLAG_SIMULATION);
-		} catch ( RendererException e ) {
-			// print trace so debugging is possible
-			e.printStackTrace();
-			
-			// in case of an error close app
-			App.getInstance().setNext(App.RUNFLAG_STOP);
-		}
-	}
-
+	
 	@Override
 	public Texture getTexture() {
 		try {
-			return TextureLoader.getTexture("PNG", new FileInputStream("resources/img/btn_play.png"));
+			return TextureLoader.getTexture("PNG", new FileInputStream("resources/img/btn_pause.png"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,12 +46,21 @@ public class PlayButton extends Button {
 
 	@Override
 	public int getWidth() {
-		return 200;
+		return 100;
 	}
 
 	@Override
 	public int getHeight() {
-		return 200;
+		return 100;
+	}
+	
+	@Override
+	public void onClick() {
+		Renderer activeRenderer = App.getInstance().getActiveRenderer();
+		
+		if(activeRenderer != null) {
+			activeRenderer.togglePause();
+		}
 	}
 
 }

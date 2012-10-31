@@ -3,33 +3,32 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Stack;
 
-import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.glu.GLU;
-
 import de.futjikato.javahasen.App;
+import de.futjikato.javahasen.Renderer;
+import de.futjikato.javahasen.RendererException;
 
-public class Renderer {
+public class SimulationRenderer extends Renderer {
 	
-	private int width;
-	private int height;
-	private boolean isRunning = false;
 	private InputHandler input;
-	private long lastFrame;
-	private long lastGeneratione;
-	private long lastFPS;
-	private int fps = 0;
 	
 	private float cx = 0;
 	private float cy = 0;
+	
+	protected long lastGeneratione;
 	
 	private float camera_x = 25;
 	private float camera_y = 120;
 	private float camera_rotation = 0;
 	
 	private int stepInterval = 100;
+	private static SimulationRenderer instane;
 	
-	public Renderer() {
+	private SimulationRenderer() {
+		
+		// Singleton
+		SimulationRenderer.instane = this;
+		
 		Field field = Simulator.getInstance().getField();
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		Display.setResizable(true);
@@ -47,33 +46,14 @@ public class Renderer {
 		}
 		
 		this.input = new InputHandler();
-		this.init();
 	}
 	
-	public void init() {
-		try {
-			Display.setDisplayMode(new DisplayMode(this.width,this.height));
-			Display.setTitle("JavaHasen - Simulation");
-			Display.create();
-		} catch (LWJGLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static SimulationRenderer getInstance() {
+		if(SimulationRenderer.instane == null) {
+			SimulationRenderer.instane = new SimulationRenderer();
 		}
 		
-		GL11.glViewport(0, 0, width, height);
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();		
-		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 200.0f);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
-		
-		GL11.glShadeModel(GL11.GL_SMOOTH); // Enables Smooth Shading
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Black Background
-		GL11.glClearDepth(1.0f); // Depth Buffer Setup
-		GL11.glEnable(GL11.GL_DEPTH_TEST); // Enables Depth Testing
-		GL11.glDepthFunc(GL11.GL_LEQUAL); // The Type Of Depth Test To Do
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST); // Really Nice Perspective Calculations
- 
+		return SimulationRenderer.instane;
 	}
 	
 	protected void drawCube(float size) {
@@ -163,11 +143,32 @@ public class Renderer {
 			this.drawCreature(currCreature);
 		}
 	}
-	
-	public void render(Stack<Creature> creatures) {
-		// Clear the screen and depth buffer
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		GL11.glLoadIdentity();
+
+	public void moveTo(float x, float y) {
+		float diffx = (x - 25) - this.cx;
+		float diffy = (y - 120) - this.cy;
+		GL11.glTranslatef(diffx, 0, diffy);
+		this.cx = (x - 25);
+		this.cy = (y - 120);
+	}
+
+	@Override
+	protected void render3D() throws RendererException {
+		
+		Simulator sim = Simulator.getInstance();
+		
+		if(this.getGenerationDelta() > this.stepInterval) {
+			this.lastGeneratione = this.getTime();
+			
+			boolean succ = sim.nextStep();
+			if(!succ) {
+				throw new RendererException("Something went wrong while generating the next generation. Stop simulation");
+			}
+			
+		}
+		
+		// get creatures from simulation
+		Stack<Creature> creatures = sim.getCreatures();
 		
 		// set perspective
 		int fieldSize = Simulator.getInstance().getField().getSize();
@@ -189,26 +190,6 @@ public class Renderer {
 		GL11.glLoadIdentity();
 		GL11.glRotatef(this.camera_rotation, 0, 1, 0);
 		this.moveTo(this.camera_x, this.camera_y);
-		
-		// update screen
-		Display.update();
-		this.lastFrame = this.getTime();
-		
-		// update fps
-		this.updateFPS();
-	}
-	
-	/** 
-	 * Calculate how many milliseconds have passed 
-	 * since last frame.
-	 * 
-	 * @return milliseconds passed since last frame 
-	 */
-	public int getDelta() {
-	    long time = getTime();
-	    int delta = (int) (time - this.lastFrame);
-	 
-	    return delta;
 	}
 	
 	/** 
@@ -223,92 +204,20 @@ public class Renderer {
 	 
 	    return delta;
 	}
-	
-	/**
-	 * Get the accurate system time
-	 * 
-	 * @return The system time in milliseconds
-	 */
-	public long getTime() {
-	    return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+
+
+	@Override
+	protected void render2D() throws RendererException {
+		// nothing to do
 	}
-	
-	/**
-	 * Calculate the FPS and set it in the title bar
-	 */
-	public void updateFPS() {
-	    if (getTime() - this.lastFPS > 1000) {
-	        System.out.println("FPS : " + this.fps);
-	        this.fps = 0; //reset the FPS counter
-	        this.lastFPS += 1000; //add one second
-	    }
-	    fps++;
+
+	@Override
+	protected int getAppRunflag() {
+		return App.RUNFLAG_MENU;
 	}
-	
-	public void moveTo(float x, float y) {
-		float diffx = (x - 25) - this.cx;
-		float diffy = (y - 120) - this.cy;
-		GL11.glTranslatef(diffx, 0, diffy);
-		this.cx = (x - 25);
-		this.cy = (y - 120);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void start() {
-		
-		// render inital state
-		Simulator sim = Simulator.getInstance();
-		this.render(sim.getCreatures());
-		this.lastFrame = this.getTime();
-		this.lastFPS = this.getTime();
-		
-		try {
-			this.isRunning = true;
-			// set an valid lastFrame time on start
-			this.lastFrame = this.getTime();
-			
-			// render loop
-			while(this.isRunning) {
-				if(Display.isCloseRequested()) {
-					this.isRunning = false;
-					App.getInstance().setNext(App.RUNFLAG_MENU);
-					break;
-				}
-				
-				Stack<Creature> creatures = null;
-				if(this.getGenerationDelta() > this.stepInterval) {
-					
-					boolean succ = sim.nextStep();
-					if(!succ) {
-						throw new Exception("Something went wrong while generating the next generation. Stop simulation");
-					}
-					
-					creatures = (Stack<Creature>) sim.getCreatures().clone();
-					if(creatures == null) {
-						System.out.println("-END- with error");
-						this.stop();
-						return;
-					}
-					
-					this.lastGeneratione = this.getTime();
-				} else {
-					creatures = sim.getCreatures();
-				}
-				
-				this.render(creatures);
-			}
-		} catch ( Exception e ) {
-			// if something went wrong make a clean quit
-			this.isRunning = false;
-			App.getInstance().setNext(App.RUNFLAG_STOP);
-			
-			System.out.println("Stopping simulation. Error in render loop.");
-		}
-		
-		Display.destroy();
-	}
-	
-	public void stop() {
-		this.isRunning = false;
+
+	@Override
+	protected void printFPS(int fps) {
+		System.out.println("FPS : " + fps);
 	}
 }

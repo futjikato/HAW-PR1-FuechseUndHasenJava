@@ -8,6 +8,7 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import de.futjikato.javahasen.App;
+import de.futjikato.javahasen.RendererException;
 import de.futjikato.javahasen.menu.MenuRenderer;
 
 public class QuitButton extends Button {
@@ -22,8 +23,13 @@ public class QuitButton extends Button {
 	
 	@Override
 	public void onClick() {
-		// stop menu
-		MenuRenderer.stop();
+		try {
+			// stop menu
+			MenuRenderer.getInstance().stop();
+		} catch ( RendererException e ) {
+			// print trace so debugging is possible; quit in any case
+			e.printStackTrace();
+		}
 		
 		// say app to go to the simulation after closing menu
 		App.getInstance().setNext(App.RUNFLAG_STOP);
