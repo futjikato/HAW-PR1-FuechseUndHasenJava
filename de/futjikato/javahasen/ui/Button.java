@@ -4,6 +4,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import de.futjikato.javahasen.RendererException;
 
@@ -84,6 +85,8 @@ public abstract class Button {
 		      GL11.glTexCoord2f(0, 0);
 		
 		GL11.glEnd();
+		
+		TextureImpl.bindNone();
 		
 		GL11.glPopMatrix();
 	}

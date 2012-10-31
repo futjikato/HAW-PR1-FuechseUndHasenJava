@@ -15,6 +15,8 @@ public class Simulator {
 	
 	protected static Simulator instance;
 	
+	private boolean isPaused = false;
+	
 	protected Simulator() {
 		Simulator.instance = this;
 	}
@@ -72,7 +74,7 @@ public class Simulator {
 				currentCreature.getPosition().reachedNewPosition();
 				
 				// process creature of given class
-				if(currentCreature.getClass().equals(processCreature)) {
+				if(currentCreature.getClass().equals(processCreature) && !this.isPaused) {
 					currentCreature.process();
 				}
 				
@@ -155,5 +157,9 @@ public class Simulator {
 		this.simulationCreatureIndex++;
 		
 		return succ;
+	}
+
+	public void togglePause() {
+		this.isPaused = !this.isPaused;
 	}
 }

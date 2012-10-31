@@ -20,20 +20,12 @@ abstract public class Renderer {
 	private int fps = 0;
 	
 	// Flags
-	private boolean isPaused = false;
 	private boolean isRunning = false;
 	private boolean hasError = false;
 	
 	// constants
 	public static final int RENDER_2D = 2;
 	public static final int RENDER_3D = 3;
-	
-	public void togglePause() {
-		this.isPaused = !this.isPaused;
-		
-		// reset fps
-		this.initFPS();
-	}
 	
 	public void stop() throws RendererException {
 		if(!this.isRunning) {
@@ -82,18 +74,16 @@ abstract public class Renderer {
 				// clear
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 				GL11.glLoadIdentity();
-
+				
+				// init basic rendering stuff
+				this.initRendering(RENDER_3D);
+				// render scene
+				this.render3D();
+				
 				// init basic rendering stuff
 				this.initRendering(RENDER_2D);
 				// render ui or whatever 2d
 				this.render2D();
-				
-				if(!this.isPaused) {
-					// init basic rendering stuff
-					this.initRendering(RENDER_3D);
-					// render scene
-					this.render3D();
-				}
 				
 				// update screen
 				Display.update();
@@ -122,20 +112,27 @@ abstract public class Renderer {
 		Display.setDisplayMode(new DisplayMode(this.width,this.height));
 		Display.setTitle(this.title);
 		Display.create();
+		
+		GL11.glViewport(0, 0, width, height);
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Black Background
+		
+		GL11.glShadeModel(GL11.GL_SMOOTH); // Enables Smooth Shading
+		GL11.glDepthFunc(GL11.GL_LEQUAL); // The Type Of Depth Test To Do
+		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST); // Really Nice Perspective Calculations
+		GL11.glClearDepth(1.0f); // Depth Buffer Setup
 	}
 	
 	private void initRendering(int perspective) throws RendererException {
-		GL11.glViewport(0, 0, width, height);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		
 		// load and apply perspective
 		switch(perspective) {
 			case RENDER_2D:
-				this.apply2DPerspective();
+				GL11.glOrtho(0, this.width, this.height, 0, 1, -1);
 				break;
 			case RENDER_3D:
-				this.apply3DPerspective();
+				GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 200.0f);
 				break;
 			default:
 				throw new RendererException("Invalid perspective fllag given. Must be either 2D or 3D");
@@ -144,21 +141,15 @@ abstract public class Renderer {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		
-		GL11.glShadeModel(GL11.GL_SMOOTH); // Enables Smooth Shading
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Black Background
-		GL11.glClearDepth(1.0f); // Depth Buffer Setup
-		GL11.glEnable(GL11.GL_DEPTH_TEST); // Enables Depth Testing
-		GL11.glDepthFunc(GL11.GL_LEQUAL); // The Type Of Depth Test To Do
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST); // Really Nice Perspective Calculations
-		GL11.glEnable(GL11.GL_TEXTURE_2D); // enable textures
-	}
-
-	protected void apply3DPerspective() {	
-		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 200.0f);
-	}
-
-	protected void apply2DPerspective() {
-		GL11.glOrtho(0, this.width, this.height, 0, 1, -1);
+		// load and apply perspective
+				switch(perspective) {
+					case RENDER_2D:
+						GL11.glDisable(GL11.GL_DEPTH_TEST);
+						break;
+					case RENDER_3D:
+						GL11.glEnable(GL11.GL_DEPTH_TEST);
+						break;
+				}
 	}
 
 	protected abstract void render3D() throws RendererException;
