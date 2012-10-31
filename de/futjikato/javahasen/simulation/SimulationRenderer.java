@@ -7,6 +7,8 @@ import org.lwjgl.opengl.*;
 import de.futjikato.javahasen.App;
 import de.futjikato.javahasen.Renderer;
 import de.futjikato.javahasen.RendererException;
+import de.futjikato.javahasen.ui.Button;
+import de.futjikato.javahasen.ui.PauseButton;
 
 public class SimulationRenderer extends Renderer {
 	
@@ -23,6 +25,10 @@ public class SimulationRenderer extends Renderer {
 	
 	private int stepInterval = 100;
 	private static SimulationRenderer instane;
+	
+	protected Button[] buttons = new Button[] {
+		new PauseButton(5, 5)
+	};
 	
 	private SimulationRenderer() {
 		
@@ -205,10 +211,16 @@ public class SimulationRenderer extends Renderer {
 	    return delta;
 	}
 
-
+	protected void drawUi() throws RendererException {
+		for(Button btn : this.buttons) {
+			btn.checkEvents();
+			btn.draw();
+		}
+	}
+	
 	@Override
 	protected void render2D() throws RendererException {
-		// nothing to do
+		this.drawUi();
 	}
 
 	@Override

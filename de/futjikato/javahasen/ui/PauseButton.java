@@ -9,6 +9,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 import de.futjikato.javahasen.App;
 import de.futjikato.javahasen.Renderer;
+import de.futjikato.javahasen.simulation.Simulator;
 
 public class PauseButton extends Button {
 
@@ -46,21 +47,17 @@ public class PauseButton extends Button {
 
 	@Override
 	public int getWidth() {
-		return 100;
+		return 50;
 	}
 
 	@Override
 	public int getHeight() {
-		return 100;
+		return 50;
 	}
 	
 	@Override
 	public void onClick() {
-		Renderer activeRenderer = App.getInstance().getActiveRenderer();
-		
-		if(activeRenderer != null) {
-			activeRenderer.togglePause();
-		}
+		Simulator.getInstance().togglePause();
 	}
 
 }
