@@ -7,7 +7,7 @@ import de.futjikato.javahasen.menu.MenuRenderer;
 import de.futjikato.javahasen.simulation.Creature;
 import de.futjikato.javahasen.simulation.Field;
 import de.futjikato.javahasen.simulation.Rabbit;
-import de.futjikato.javahasen.simulation.Renderer;
+import de.futjikato.javahasen.simulation.SimulationRenderer;
 import de.futjikato.javahasen.simulation.Simulator;
 
 public class App {
@@ -31,6 +31,7 @@ public class App {
 			app.next();
 		} catch (Exception e) {
 			e.printStackTrace();
+			app.setNext(App.RUNFLAG_STOP);
 		}
 	}
 	
@@ -68,8 +69,15 @@ public class App {
 	}
 	
 	public void startMenu() {
-		MenuRenderer menuRenderer = new MenuRenderer();
-		menuRenderer.start();
+		try {
+			MenuRenderer menuRenderer = MenuRenderer.getInstance();
+			menuRenderer.start();
+		} catch (Exception e) {
+			// stop on error
+			this.setNext(App.RUNFLAG_STOP);
+			
+			e.printStackTrace();
+		}
 	}
 	
 	public void startSimulation() {
@@ -77,7 +85,7 @@ public class App {
 		Field battlefield = new Field(60);
 		Simulator simulat = Simulator.getInstance();
 		simulat.setField(battlefield);
-		Renderer renderer = new Renderer();
+		SimulationRenderer renderer = SimulationRenderer.getInstance();
 		
 		// add 20 tigers to the field
 		try {
@@ -115,8 +123,28 @@ public class App {
 			System.out.println("Failed to add rabbits :(");
 		}
 		
-		// start the simulation
-		renderer.start();
+		try {
+			// start the simulation
+			renderer.start();
+		} catch ( RendererException e ) {
+			// stop on error
+			this.setNext(App.RUNFLAG_STOP);
+			
+			e.printStackTrace();
+		}
+	}
+
+	public Renderer getActiveRenderer() {
+		
+		if(this.startOnNext == App.RUNFLAG_MENU) {
+			return MenuRenderer.getInstance();
+		}
+		
+		if(this.startOnNext == App.RUNFLAG_SIMULATION) {
+			return SimulationRenderer.getInstance();
+		}
+		
+		return null;
 	}
 
 }

@@ -1,10 +1,7 @@
 package de.futjikato.javahasen.simulation;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
-
-import de.futjikato.javahasen.App;
 
 public class Simulator {
 	
