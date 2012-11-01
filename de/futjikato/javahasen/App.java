@@ -14,7 +14,7 @@ public class App {
 	
 	protected static App instance;
 	
-	protected int startOnNext = 2; // start with menu
+	protected int startOnNext = 1; // start with menu
 	
 	protected int initalSickRabbits = 10;
 	
