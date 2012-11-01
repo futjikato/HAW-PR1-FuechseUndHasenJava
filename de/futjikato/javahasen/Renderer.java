@@ -7,6 +7,8 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import de.futjikato.javahasen.ui.UserInterface;
+
 abstract public class Renderer {
 
 	// Window settings
@@ -22,10 +24,6 @@ abstract public class Renderer {
 	// Flags
 	private boolean isRunning = false;
 	private boolean hasError = false;
-	
-	// constants
-	public static final int RENDER_2D = 2;
-	public static final int RENDER_3D = 3;
 	
 	public void stop() throws RendererException {
 		if(!this.isRunning) {
@@ -76,14 +74,11 @@ abstract public class Renderer {
 				GL11.glLoadIdentity();
 				
 				// init basic rendering stuff
-				this.initRendering(RENDER_3D);
+				this.initRendering();
 				// render scene
 				this.render3D();
 				
-				// init basic rendering stuff
-				this.initRendering(RENDER_2D);
-				// render ui or whatever 2d
-				this.render2D();
+				this.getUI().update();
 				
 				// update screen
 				Display.update();
@@ -100,6 +95,7 @@ abstract public class Renderer {
 			e.printStackTrace();
 		}
 
+		this.getUI().destroy();
 		Display.destroy();
 	}
 	
@@ -122,38 +118,17 @@ abstract public class Renderer {
 		GL11.glClearDepth(1.0f); // Depth Buffer Setup
 	}
 	
-	private void initRendering(int perspective) throws RendererException {
+	private void initRendering() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		
-		// load and apply perspective
-		switch(perspective) {
-			case RENDER_2D:
-				GL11.glOrtho(0, this.width, this.height, 0, 1, -1);
-				break;
-			case RENDER_3D:
-				GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 200.0f);
-				break;
-			default:
-				throw new RendererException("Invalid perspective fllag given. Must be either 2D or 3D");
-		}
-		
+		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 200.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
-		
-		// load and apply perspective
-				switch(perspective) {
-					case RENDER_2D:
-						GL11.glDisable(GL11.GL_DEPTH_TEST);
-						break;
-					case RENDER_3D:
-						GL11.glEnable(GL11.GL_DEPTH_TEST);
-						break;
-				}
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	protected abstract void render3D() throws RendererException;
-	protected abstract void render2D() throws RendererException;
+	protected abstract UserInterface getUI();
 	
 	protected abstract int getAppRunflag();
 	
