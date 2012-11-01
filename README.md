@@ -1,4 +1,4 @@
-#JavaHasen 1.1
+#JavaHasen 1.2
 
 A simple simulation of different creatures on a field eating, spawn children and die at some point.<br>
 This project is inspired by a lecture i recently attended.<br>
@@ -7,11 +7,10 @@ So I started to rebuild the simple simulation and add a little bit of falvor to 
 
 ![Screenshot](https://raw.github.com/futjikato/HAW-PR1-FuechseUndHasenJava/master/resources/javahasen_screen_mac.png "Screenshot of a running simulation")
 
-### What´s new in 1.1
+### What´s new in 1.2
 
-I made the decision to add a version number and set this to 1.1 because I rewrote major parts of the simulation.
-In prior versions the field/position logic was really creepy and not really reliable.<br>
-Some parts are still old and dirty but the time has come to make performance and stability improvements. 
+* Removed Slick2D Library
+* Added TWL lib
 
 ## How to get it running
 
@@ -19,7 +18,7 @@ This example uses [LWJGL](http://www.lwjgl.org) as the rendering engine.
 Its really simple [to make this work in Eclispe](http://www.lwjgl.org/wiki/index.php?title=Setting_Up_LWJGL_with_Eclipse).
 In addition you need to add the lwjgl_util.jar as an external lib to make the 3d stuff work :-)
 
-I´m also using the [Slick-Util](http://www.slick2d.org/) library ( updated in 1.1 so watch out here ! ) to load textures.
+I´m also using [TWL](http://twl.l33tlabs.org/) ( updated in 1.2 so watch out here ! ) for the GUI.
 It´s included in the repository and needs to be added as an external jar, too.
 
 ## Controls
@@ -35,10 +34,8 @@ There might be some mouse control right now but it is buggy and ugly.
 
 ## ToDo´s
 
-* Improve start menu
+* Add models for creatures
 * Create more creatures
-* Add textures to simulation
-* Add options to configure simulation parameters
 * Improve camera movement and stuff....
 
 ## License ( [MIT](http://www.opensource.org/licenses/MIT) )
