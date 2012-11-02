@@ -1,7 +1,5 @@
 package de.futjikato.javahasen.menu;
 
-import java.io.IOException;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 
