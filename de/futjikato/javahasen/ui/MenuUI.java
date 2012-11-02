@@ -6,11 +6,13 @@ import java.net.URL;
 import org.lwjgl.LWJGLException;
 
 import de.futjikato.javahasen.App;
+import de.futjikato.javahasen.RendererException;
+import de.futjikato.javahasen.menu.MenuRenderer;
 import de.matthiasmann.twl.*;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 
-public class MenuUI extends Widget implements UserInterface {
+public class MenuUI extends Widget implements UserInterface, Runnable  {
 	
 	private GUI gui;
 	private ThemeManager theme;
@@ -35,6 +37,7 @@ public class MenuUI extends Widget implements UserInterface {
 	private void initUi() {
 		this.btnPlay = new ToggleButton();
 		this.btnPlay.setText("Play");
+		this.btnPlay.addCallback(this);
         this.add(this.btnPlay);
 	}
 	
@@ -52,5 +55,16 @@ public class MenuUI extends Widget implements UserInterface {
 	public void destroy() {
 		this.gui.destroy();
 		this.theme.destroy();
+	}
+
+	@Override
+	public void run() {
+		System.out.println("Click");
+		App.getInstance().setNext(App.RUNFLAG_SIMULATION);
+		try {
+			MenuRenderer.getInstance().stop();
+		} catch (RendererException e) {
+			e.printStackTrace();
+		}
 	}
 }
