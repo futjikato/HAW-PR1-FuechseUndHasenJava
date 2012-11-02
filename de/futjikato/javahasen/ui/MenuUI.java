@@ -36,8 +36,19 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 	
 	private void initUi() {
 		this.btnPlay = new ToggleButton();
-		this.btnPlay.setText("Play");
-		this.btnPlay.addCallback(this);
+		this.btnPlay.setText("Play !");
+		this.btnPlay.addCallback(new Runnable() {
+			@Override
+			public void run() {
+				App.getInstance().setNext(App.RUNFLAG_SIMULATION);
+				try {
+					MenuRenderer.getInstance().stop();
+				} catch (RendererException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
         this.add(this.btnPlay);
 	}
 	

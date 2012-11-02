@@ -12,7 +12,9 @@ public class MenuRenderer extends Renderer {
 	
 	private static MenuRenderer instance;
 	
-	private MenuRenderer() {
+	private MenuUI ui;
+	
+	private MenuRenderer()  {
 		
 		MenuRenderer.instance = this;
 		
@@ -48,11 +50,15 @@ public class MenuRenderer extends Renderer {
 
 	@Override
 	protected UserInterface getUI() {
-		try {
-			return new MenuUI();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
+		if(this.ui == null) {
+			try {
+				this.ui = new MenuUI();
+			} catch (LWJGLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		return null;
+		
+		return this.ui;
 	}
 }
