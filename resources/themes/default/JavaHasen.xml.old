@@ -32,9 +32,8 @@
     </theme>
     <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/Button_01.png">
         <area name="button" xywh="0,0,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
-        <area name="buttonA" xywh="0,50,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
         <select name="button.bg">
-            <alias ref="buttonA" if="selected"/>
+            <alias ref="button" if="pressed" inset="-50,0,50,0"/>
             <alias ref="button"/>
         </select>
     </images>
@@ -42,6 +41,7 @@
     <theme name="menuui" ref="-defaults" allowWildcard="true">
         <theme name="togglebutton" ref="-defaults">
             <param name="background"><image>button.bg</image></param>
+            <param name="font"><font>normal</font></param>
             <param name="border"><border>0,75,0,0</border></param>
         </theme>
     </theme>
