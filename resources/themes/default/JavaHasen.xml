@@ -32,9 +32,9 @@
     </theme>
     <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/Button_01.png">
         <area name="button" xywh="0,0,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
-        <area name="buttonA" xywh="0,50,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
+        <area name="button.hover" xywh="0,50,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
         <select name="button.bg">
-            <alias ref="buttonA" if="selected"/>
+            <alias ref="button.hover" if="hover + !disabled"/>
             <alias ref="button"/>
         </select>
     </images>
