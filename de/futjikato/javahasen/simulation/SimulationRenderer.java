@@ -3,10 +3,13 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Stack;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 import de.futjikato.javahasen.App;
 import de.futjikato.javahasen.Renderer;
 import de.futjikato.javahasen.RendererException;
+import de.futjikato.javahasen.ui.MenuUI;
+import de.futjikato.javahasen.ui.SimulationUI;
 import de.futjikato.javahasen.ui.UserInterface;
 
 public class SimulationRenderer extends Renderer {
@@ -24,6 +27,8 @@ public class SimulationRenderer extends Renderer {
 	
 	private int stepInterval = 100;
 	private static SimulationRenderer instane;
+	
+	private SimulationUI ui;
 	
 	private SimulationRenderer() {
 		
@@ -218,6 +223,11 @@ public class SimulationRenderer extends Renderer {
 
 	@Override
 	protected UserInterface getUI() {
-		return null;
+		try {
+			return SimulationUI.getInstance();
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			return null; //TODO handle errors
+		}
 	}
 }
