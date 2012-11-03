@@ -38,6 +38,10 @@ There might be some mouse control right now but it is buggy and ugly.
 * Create more creatures
 * Improve camera movement and stuff....
 
+### Credits
+
+Here goes some credit text.
+
 ## License ( [MIT](http://www.opensource.org/licenses/MIT) )
 
 Copyright (c) 2012 Moritz Spindelhirn

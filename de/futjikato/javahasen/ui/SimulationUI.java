@@ -4,22 +4,26 @@ import java.io.IOException;
 import java.net.URL;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 
 import de.futjikato.javahasen.App;
 import de.futjikato.javahasen.RendererException;
 import de.futjikato.javahasen.menu.MenuRenderer;
+import de.futjikato.javahasen.simulation.Simulator;
 import de.matthiasmann.twl.*;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 
-public class MenuUI extends Widget implements UserInterface, Runnable  {
+public class SimulationUI extends Widget implements UserInterface  {
 	
 	private GUI gui;
 	private ThemeManager theme;
 	
-	private ToggleButton btnPlay;
+	private static SimulationUI instance;
 	
-	public MenuUI() throws LWJGLException {
+	public ToggleButton btnPause;
+	
+	private  SimulationUI() throws LWJGLException {
 		this.initUi();
 		
 		LWJGLRenderer renderer = new LWJGLRenderer();
@@ -34,29 +38,44 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 		this.gui.applyTheme(this.theme);
 	}
 	
+	public static SimulationUI getInstance() throws LWJGLException {
+		if(SimulationUI.instance == null) {
+			SimulationUI.instance = new SimulationUI();
+		}
+		
+		return SimulationUI.instance;
+	}
+	
 	private void initUi() {
-		this.btnPlay = new ToggleButton();
-		this.btnPlay.setText("Play !");
-		this.btnPlay.addCallback(new Runnable() {
+		this.btnPause = new ToggleButton();
+		this.btnPause.setText("Pause");
+		this.btnPause.addCallback(new Runnable() {
 			@Override
 			public void run() {
-				App.getInstance().setNext(App.RUNFLAG_SIMULATION);
+				Simulator.getInstance().togglePause();
+				
+				ToggleButton currBtn = null;
 				try {
-					MenuRenderer.getInstance().stop();
-				} catch (RendererException e) {
-					// TODO Auto-generated catch block
+					currBtn = SimulationUI.getInstance().btnPause;
+				} catch (LWJGLException e) {
 					e.printStackTrace();
+				}
+				
+				if(currBtn != null && currBtn.getText() == "Pause") {
+					currBtn.setText("Resume");
+				} else {
+					currBtn.setText("Pause");
 				}
 			}
 		});
-        this.add(this.btnPlay);
+        this.add(this.btnPause);
 	}
 	
 	@Override
 	protected void layout() {
 		// play btn
-		this.btnPlay.setPosition(20, 20);
-		this.btnPlay.adjustSize();
+		this.btnPause.setPosition(Display.getWidth() - 220, 20);
+		this.btnPause.adjustSize();
 	}
 
 	public void update() {
@@ -65,16 +84,5 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 	
 	public void destroy() {
 		
-	}
-
-	@Override
-	public void run() {
-		System.out.println("Click");
-		App.getInstance().setNext(App.RUNFLAG_SIMULATION);
-		try {
-			MenuRenderer.getInstance().stop();
-		} catch (RendererException e) {
-			e.printStackTrace();
-		}
 	}
 }
