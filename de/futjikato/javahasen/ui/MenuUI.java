@@ -5,10 +5,6 @@ import java.net.URL;
 
 import org.lwjgl.LWJGLException;
 
-import com.sun.org.apache.xerces.internal.impl.dv.ValidatedInfo;
-
-import sun.awt.HorizBagLayout;
-
 import de.futjikato.javahasen.App;
 import de.futjikato.javahasen.RendererException;
 import de.futjikato.javahasen.menu.MenuRenderer;

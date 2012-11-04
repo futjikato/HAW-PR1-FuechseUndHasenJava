@@ -19,7 +19,7 @@
         <action name="paste">cmd V</action>
     </inputMapDef>
     
-    <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/Button_01.png">
+    <images file="../../img/Button_01.png">
         <area name="button" xywh="0,0,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
         <area name="button.hover" xywh="0,50,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
         <area name="pause" xywh="0,100,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
@@ -29,13 +29,13 @@
         </select>
     </images>
     
-     <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/Scroller.png">
+     <images file="../../img/Scroller.png">
         <area name="hscroller.left" xywh="0,0,26,50"/>
         <area name="hscroller.right" xywh="26,0,26,50"/>
         <area name="hscroller.center" xywh="52,0,19,50"/>
     </images>
     
-    <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/dev.png">
+    <images file="../../img/dev.png">
         <area name="dev" xywh="0,0,50,50"/>
     </images>
 
