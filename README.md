@@ -11,6 +11,9 @@ So I started to rebuild the simple simulation and add a little bit of falvor to 
 
 * Removed Slick2D Library
 * Added TWL lib
+* New Menu Screen
+* New Pause Button in simulation
+* Decity scroller on menu
 
 ## How to get it running
 
@@ -19,7 +22,8 @@ Its really simple [to make this work in Eclispe](http://www.lwjgl.org/wiki/index
 In addition you need to add the lwjgl_util.jar as an external lib to make the 3d stuff work :-)
 
 I´m also using [TWL](http://twl.l33tlabs.org/) ( updated in 1.2 so watch out here ! ) for the GUI.
-It´s included in the repository and needs to be added as an external jar, too.
+It´s included in the repository and needs to be added as an external jar, too.<br>
+TWL Copyright (c) 2008-2009, Matthias Mann
 
 ## Controls
 
@@ -37,10 +41,6 @@ There might be some mouse control right now but it is buggy and ugly.
 * Add models for creatures
 * Create more creatures
 * Improve camera movement and stuff....
-
-### Credits
-
-Here goes some credit text.
 
 ## License ( [MIT](http://www.opensource.org/licenses/MIT) )
 
