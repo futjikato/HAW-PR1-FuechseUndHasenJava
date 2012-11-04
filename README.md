@@ -19,11 +19,14 @@ So I started to rebuild the simple simulation and add a little bit of falvor to 
 
 This example uses [LWJGL](http://www.lwjgl.org) as the rendering engine.
 Its really simple [to make this work in Eclispe](http://www.lwjgl.org/wiki/index.php?title=Setting_Up_LWJGL_with_Eclipse).
-In addition you need to add the lwjgl_util.jar as an external lib to make the 3d stuff work :-)
+In addition you need to add the lwjgl_util.jar as an external lib to make the 3d stuff work :-)<br>
+LWJGL Copyright (c) 2002-2007 Lightweight Java Game Library Project<br>
+All rights reserved.
 
 I´m also using [TWL](http://twl.l33tlabs.org/) ( updated in 1.2 so watch out here ! ) for the GUI.
 It´s included in the repository and needs to be added as an external jar, too.<br>
-TWL Copyright (c) 2008-2009, Matthias Mann
+TWL Copyright (c) 2008-2009, Matthias Mann<br>
+All rights reserved.
 
 ## Controls
 
