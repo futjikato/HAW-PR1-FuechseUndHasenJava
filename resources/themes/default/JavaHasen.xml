@@ -18,6 +18,26 @@
         <action name="paste">ctrl V</action>
         <action name="paste">cmd V</action>
     </inputMapDef>
+    
+    <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/Button_01.png">
+        <area name="button" xywh="0,0,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
+        <area name="button.hover" xywh="0,50,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
+        <area name="pause" xywh="0,100,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
+        <select name="button.bg">
+            <alias ref="button.hover" if="hover + !disabled"/>
+            <alias ref="button"/>
+        </select>
+    </images>
+    
+     <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/Scroller.png">
+        <area name="hscroller.left" xywh="0,0,26,50"/>
+        <area name="hscroller.right" xywh="26,0,26,50"/>
+        <area name="hscroller.center" xywh="52,0,19,50"/>
+    </images>
+    
+    <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/dev.png">
+        <area name="dev" xywh="0,0,50,50"/>
+    </images>
 
     <theme name="-defaults">
         <param name="background"><image>none</image></param>
@@ -29,22 +49,66 @@
         <param name="maxWidth"><int>0</int></param>
         <param name="maxHeight"><int>0</int></param>
         <param name="inputMap"><inputMap>-defaultInputMap</inputMap></param>
+        
+        <!-- Horizontal Scrollbar -->
+        <theme name="hscrollbar">
+        	<param name="background"><image>none</image></param>
+        	<param name="overlay"><image>none</image></param>
+        	
+        	<param name="minWidth"><int>200</int></param>
+        	<param name="maxWidth"><int>200</int></param>
+        	<param name="minHeight"><int>50</int></param>
+        	<param name="maxHeight"><int>50</int></param>
+        	<param name="scaleThumb"><bool>false</bool></param>
+        	
+            <theme name="leftbutton">
+            	<param name="background"><image>hscroller.left</image></param>
+        		<param name="overlay"><image>none</image></param>
+        		
+        		<param name="minWidth"><int>26</int></param>
+	        	<param name="maxWidth"><int>26</int></param>
+	        	<param name="minHeight"><int>50</int></param>
+	        	<param name="maxHeight"><int>50</int></param>
+	        	
+	        	<param name="font"><font>normal</font></param>
+       	 		<param name="textAlignment"><enum type="alignment">left</enum></param>
+            </theme>
+            <theme name="rightbutton">
+            	<param name="background"><image>hscroller.right</image></param>
+            	<param name="overlay"><image>none</image></param>
+            	
+            	<param name="minWidth"><int>26</int></param>
+	        	<param name="maxWidth"><int>26</int></param>
+	        	<param name="minHeight"><int>50</int></param>
+	        	<param name="maxHeight"><int>50</int></param>
+	        	
+	        	<param name="font"><font>normal</font></param>
+       	 		<param name="textAlignment"><enum type="alignment">left</enum></param>
+            </theme>
+            <theme name="thumb">
+           		<param name="background"><image>hscroller.center</image></param>
+           		<param name="overlay"><image>none</image></param>
+           		
+           		<param name="minWidth"><int>19</int></param>
+	        	<param name="maxWidth"><int>19</int></param>
+	        	<param name="minHeight"><int>50</int></param>
+	        	<param name="maxHeight"><int>50</int></param>
+	        	
+	        	<param name="font"><font>normal</font></param>
+       	 		<param name="textAlignment"><enum type="alignment">left</enum></param>
+            </theme>
+        </theme>
     </theme>
-    
-    <images file="/C:/Users/Moritz/Documents/GitHub/HAW-PR1-FuechseUndHasenJava/resources/img/Button_01.png">
-        <area name="button" xywh="0,0,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
-        <area name="button.hover" xywh="0,50,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
-        <area name="pause" xywh="0,100,200,50" nocenter="true" splitx="L65,R25" splity="T10,B10"/>
-        <select name="button.bg">
-            <alias ref="button.hover" if="hover + !disabled"/>
-            <alias ref="button"/>
-        </select>
-    </images>
 
     <theme name="menuui" ref="-defaults" allowWildcard="true">
         <theme name="togglebutton" ref="-defaults">
             <param name="background"><image>button.bg</image></param>
             <param name="border"><border>0,75,0,0</border></param>
+        </theme>
+        <theme name="label" ref="-defaults">
+        </theme>
+        <theme name="valuelabel" ref="-defaults">
+        	<param name="border"><border>16,10,0,0</border></param>
         </theme>
     </theme>
     

@@ -82,7 +82,8 @@ public class SimulationUI extends Widget implements UserInterface  {
 		this.gui.update();
 	}
 	
-	public void destroy() {
-		
+	public void cleanup() {
+		this.gui.destroy();
+		this.theme.destroy();
 	}
 }

@@ -95,7 +95,7 @@ abstract public class Renderer {
 			e.printStackTrace();
 		}
 
-		this.getUI().destroy();
+		this.getUI().cleanup();
 		Display.destroy();
 	}
 	
