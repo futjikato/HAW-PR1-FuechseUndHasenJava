@@ -18,9 +18,21 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 	private ThemeManager theme;
 	
 	public ToggleButton btnPlay;
-	public Scrollbar densityScroll;
-	public Label densityValueLabel;
-	public Label densityLabel;
+	
+	// Tiger scroller
+	public Scrollbar tigerDensityScroll;
+	public Label tigerDensityValueLabel;
+	public Label tigerDensityLabel;
+	
+	// Rabbit scroller
+	public Scrollbar rabbitDensityScroll;
+	public Label rabbitDensityValueLabel;
+	public Label rabbitDensityLabel;
+	
+	// fieldsize scroller
+	public Scrollbar fieldsizeScroll;
+	public Label fieldsizeValueLabel;
+	public Label fieldsizeLabel;
 	
 	private static MenuUI instance;
 	
@@ -70,35 +82,95 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 		});
         this.add(this.btnPlay);
         
-        // Dencity Scrollbar
-        this.densityScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
-        this.densityScroll.setMinMaxValue(0, 100);
-        this.densityScroll.setStepSize(1);
-        this.densityScroll.addCallback(new Runnable() {
+        // Tiger Scrollbar
+        this.tigerDensityScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
+        this.tigerDensityScroll.setMinMaxValue(0, 500);
+        this.tigerDensityScroll.setStepSize(1);
+        this.tigerDensityScroll.addCallback(new Runnable() {
 			@Override
 			public void run() {
 				// update ui
 				MenuUI ui = MenuUI.getInstance();
-				int val = ui.densityScroll.getValue();
-				ui.densityValueLabel.setText(Integer.toString(val));
+				int val = ui.tigerDensityScroll.getValue();
+				ui.tigerDensityValueLabel.setText(Integer.toString(val));
 				
 				// set density in app
-				App.getInstance().setCreatureDensity(val);
+				App.getInstance().setInitalTigers(val);
 			}
 		});
-        this.add(this.densityScroll);
+        this.add(this.tigerDensityScroll);
         
-        // value label
-        this.densityValueLabel = new Label();
-        this.densityValueLabel.setTheme("valuelabel");
-        this.densityValueLabel.setText("0");
-        this.add(this.densityValueLabel);
+        // Tiger value label
+        this.tigerDensityValueLabel = new Label();
+        this.tigerDensityValueLabel.setTheme("valuelabel");
+        this.tigerDensityValueLabel.setText("0");
+        this.add(this.tigerDensityValueLabel);
         
-        // info label
-        this.densityLabel = new Label();
-        this.densityLabel.setTheme("label");
-        this.densityLabel.setText("Creature density:");
-        this.add(this.densityLabel);
+        // Tiger info label
+        this.tigerDensityLabel = new Label();
+        this.tigerDensityLabel.setTheme("label");
+        this.tigerDensityLabel.setText("Tiger density:");
+        this.add(this.tigerDensityLabel);
+        
+    	// Rabbit Scrollbar
+        this.rabbitDensityScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
+        this.rabbitDensityScroll.setMinMaxValue(0, 500);
+        this.rabbitDensityScroll.setStepSize(1);
+        this.rabbitDensityScroll.addCallback(new Runnable() {
+			@Override
+			public void run() {
+				// update ui
+				MenuUI ui = MenuUI.getInstance();
+				int val = ui.rabbitDensityScroll.getValue();
+				ui.rabbitDensityValueLabel.setText(Integer.toString(val));
+				
+				// set density in app
+				App.getInstance().setInitalRabbits(val);
+			}
+		});
+        this.add(this.rabbitDensityScroll);
+        
+        // Rabbit value label
+        this.rabbitDensityValueLabel = new Label();
+        this.rabbitDensityValueLabel.setTheme("valuelabel");
+        this.rabbitDensityValueLabel.setText("0");
+        this.add(this.rabbitDensityValueLabel);
+        
+        // Rabbit info label
+        this.rabbitDensityLabel = new Label();
+        this.rabbitDensityLabel.setTheme("label");
+        this.rabbitDensityLabel.setText("Rabbit density:");
+        this.add(this.rabbitDensityLabel);
+        
+    	// fieldsize scroller
+        this.fieldsizeScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
+        this.fieldsizeScroll.setMinMaxValue(0, 150);
+        this.fieldsizeScroll.setStepSize(1);
+        this.fieldsizeScroll.addCallback(new Runnable() {
+			@Override
+			public void run() {
+				// update ui
+				MenuUI ui = MenuUI.getInstance();
+				int val = ui.fieldsizeScroll.getValue();
+				ui.fieldsizeValueLabel.setText(Integer.toString(val) + "*" + Integer.toString(val));
+				
+				// set density in app
+				App.getInstance().setFieldsize(val);
+			}
+		});
+        this.add(this.fieldsizeScroll);
+        
+        // Rabbit value label
+        this.fieldsizeValueLabel = new Label();
+        this.fieldsizeValueLabel.setTheme("valuelabel");
+        this.fieldsizeValueLabel.setText("0");
+        this.add(this.fieldsizeValueLabel);
+        
+        // Rabbit info label
+        this.fieldsizeLabel = new Label();
+        this.fieldsizeLabel.setTheme("label");
+        this.fieldsizeLabel.setText("Fieldsize:");
+        this.add(this.fieldsizeLabel);        
 	}
 	
 	@Override
@@ -108,16 +180,40 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 		this.btnPlay.adjustSize();
 		
 		// density scroller
-		this.densityScroll.setPosition(20, 100);
-		this.densityScroll.adjustSize();
+		this.tigerDensityScroll.setPosition(20, 100);
+		this.tigerDensityScroll.adjustSize();
 		
 		// density label
-		this.densityLabel.setPosition(20, 80);
-		this.densityLabel.adjustSize();
+		this.tigerDensityLabel.setPosition(20, 80);
+		this.tigerDensityLabel.adjustSize();
 		
 		// density value label
-		this.densityValueLabel.setPosition(220, 100);
-		this.densityValueLabel.adjustSize();
+		this.tigerDensityValueLabel.setPosition(220, 100);
+		this.tigerDensityValueLabel.adjustSize();
+		
+		// density scroller
+		this.rabbitDensityScroll.setPosition(20, 180);
+		this.rabbitDensityScroll.adjustSize();
+		
+		// density label
+		this.rabbitDensityLabel.setPosition(20, 160);
+		this.rabbitDensityLabel.adjustSize();
+		
+		// density value label
+		this.rabbitDensityValueLabel.setPosition(220, 180);
+		this.rabbitDensityValueLabel.adjustSize();
+		
+		// fieldsize scroller
+		this.fieldsizeScroll.setPosition(260, 100);
+		this.fieldsizeScroll.adjustSize();
+		
+		// fieldsize label
+		this.fieldsizeLabel.setPosition(260, 80);
+		this.fieldsizeLabel.adjustSize();
+		
+		// fieldsize value label
+		this.fieldsizeValueLabel.setPosition(460, 100);
+		this.fieldsizeValueLabel.adjustSize();
 	}
 
 	public void update() {

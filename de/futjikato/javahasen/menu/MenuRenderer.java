@@ -17,7 +17,7 @@ public class MenuRenderer extends Renderer {
 		
 		Display.setResizable(true);
 		
-		this.width = 500;
+		this.width = 600;
 		this.height = 500;
 	}
 	

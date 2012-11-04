@@ -22,6 +22,16 @@ public class InputHandler {
 		return cx;
 	}
 	
+	public float handleCameraZ(float cz) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			cz -= 0.25f;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			cz += 0.25f;
+		}
+		return cz;
+	}
+	
 	public float handleCameraY(float cy) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			cy -= 0.25f;

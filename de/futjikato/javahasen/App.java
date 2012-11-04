@@ -18,16 +18,39 @@ public class App {
 	
 	protected int initalSickRabbits = 10;
 	
-	private int creatureDensity = 0;
-	
 	// constants
 	public static final int RUNFLAG_STOP = 0;
 	public static final int RUNFLAG_MENU = 1;
 	public static final int RUNFLAG_SIMULATION = 2;
 	
-	public static final int CREATURE_INIT_MAX_RABBITS = 200;
-	public static final int CREATURE_INIT_MAX_TIGERS = 250;
+	private int initalTigers = 0;
+	private int initalRabbits = 0;
+	private int fieldsize = 60;
 	
+	public int getFieldsize() {
+		return fieldsize;
+	}
+
+	public void setFieldsize(int fieldsize) {
+		this.fieldsize = fieldsize;
+	}
+
+	public int getInitalTigers() {
+		return initalTigers;
+	}
+
+	public void setInitalTigers(int initalTigers) {
+		this.initalTigers = initalTigers;
+	}
+
+	public int getInitalRabbits() {
+		return initalRabbits;
+	}
+
+	public void setInitalRabbits(int initalRabbits) {
+		this.initalRabbits = initalRabbits;
+	}
+
 	public static void main(String[] args) {
 		// start new app
 		App app = App.getInstance();
@@ -46,14 +69,6 @@ public class App {
 		}
 		
 		return App.instance;
-	}
-	
-	public int getCreatureDensity() {
-		return creatureDensity;
-	}
-
-	public void setCreatureDensity(int creatureDensity) {
-		this.creatureDensity = creatureDensity;
 	}
 
 	protected void next() throws Exception {
@@ -95,14 +110,14 @@ public class App {
 	
 	public void startSimulation() {
 		// init all components we need
-		Field battlefield = new Field(60);
+		Field battlefield = new Field(this.fieldsize);
 		Simulator simulat = Simulator.getInstance();
 		simulat.setField(battlefield);
 		SimulationRenderer renderer = SimulationRenderer.getInstance();
 		
 		// add 20 tigers to the field
 		try {
-			simulat.populate("de.futjikato.javahasen.simulation.Tiger", (App.CREATURE_INIT_MAX_RABBITS/100*this.creatureDensity));
+			simulat.populate("de.futjikato.javahasen.simulation.Tiger", this.initalTigers);
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println("Failed to add tigers :(");
@@ -110,7 +125,7 @@ public class App {
 		
 		// add 30 rabbits to the field
 		try {
-			simulat.populate("de.futjikato.javahasen.simulation.Rabbit", (App.CREATURE_INIT_MAX_TIGERS/100*this.creatureDensity));
+			simulat.populate("de.futjikato.javahasen.simulation.Rabbit", this.initalRabbits);
 			
 			Stack<Creature> creatures = simulat.getCreatures();
 			// collect all creatures of the given type

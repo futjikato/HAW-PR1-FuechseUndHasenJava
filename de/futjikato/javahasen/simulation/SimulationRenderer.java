@@ -18,11 +18,13 @@ public class SimulationRenderer extends Renderer {
 	
 	private float cx = 0;
 	private float cy = 0;
+	private float cz = 0;
 	
 	protected long lastGeneratione;
 	
 	private float camera_x = 25;
 	private float camera_y = 120;
+	private float camera_z = 0;
 	private float camera_rotation = 0;
 	
 	private int stepInterval = 100;
@@ -151,11 +153,17 @@ public class SimulationRenderer extends Renderer {
 	}
 
 	public void moveTo(float x, float y) {
+		this.moveTo(x, y, 0);
+	}
+	
+	public void moveTo(float x, float y, float z) {
 		float diffx = (x - 25) - this.cx;
 		float diffy = (y - 120) - this.cy;
-		GL11.glTranslatef(diffx, 0, diffy);
+		float diffz = z - this.cz; 
+		GL11.glTranslatef(diffx, diffz, diffy);
 		this.cx = (x - 25);
 		this.cy = (y - 120);
+		this.cz = z;
 	}
 
 	@Override
@@ -191,11 +199,12 @@ public class SimulationRenderer extends Renderer {
 		// move viewport/camera
 		this.camera_x = this.input.handleCameraX(this.camera_x);
 		this.camera_y = this.input.handleCameraY(this.camera_y);
+		this.camera_z = this.input.handleCameraZ(this.camera_z);
 		this.camera_rotation = this.input.handleRotation(this.camera_rotation);
 		
 		GL11.glLoadIdentity();
 		GL11.glRotatef(this.camera_rotation, 0, 1, 0);
-		this.moveTo(this.camera_x, this.camera_y);
+		this.moveTo(this.camera_x, this.camera_y, this.camera_z);
 	}
 	
 	/** 

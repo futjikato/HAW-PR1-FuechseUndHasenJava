@@ -121,7 +121,7 @@ abstract public class Renderer {
 	private void initRendering() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 200.0f);
+		GLU.gluPerspective(45.0f, ((float) this.width) / ((float) this.height), 0.1f, 600.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
