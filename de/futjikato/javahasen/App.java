@@ -18,10 +18,15 @@ public class App {
 	
 	protected int initalSickRabbits = 10;
 	
+	private int creatureDensity = 0;
+	
 	// constants
 	public static final int RUNFLAG_STOP = 0;
 	public static final int RUNFLAG_MENU = 1;
 	public static final int RUNFLAG_SIMULATION = 2;
+	
+	public static final int CREATURE_INIT_MAX_RABBITS = 200;
+	public static final int CREATURE_INIT_MAX_TIGERS = 250;
 	
 	public static void main(String[] args) {
 		// start new app
@@ -43,6 +48,14 @@ public class App {
 		return App.instance;
 	}
 	
+	public int getCreatureDensity() {
+		return creatureDensity;
+	}
+
+	public void setCreatureDensity(int creatureDensity) {
+		this.creatureDensity = creatureDensity;
+	}
+
 	protected void next() throws Exception {
 		switch(this.startOnNext) {
 		
@@ -89,7 +102,7 @@ public class App {
 		
 		// add 20 tigers to the field
 		try {
-			simulat.populate("de.futjikato.javahasen.simulation.Tiger", 80);
+			simulat.populate("de.futjikato.javahasen.simulation.Tiger", (App.CREATURE_INIT_MAX_RABBITS/100*this.creatureDensity));
 		} catch ( Exception e ) {
 			e.printStackTrace();
 			System.out.println("Failed to add tigers :(");
@@ -97,7 +110,7 @@ public class App {
 		
 		// add 30 rabbits to the field
 		try {
-			simulat.populate("de.futjikato.javahasen.simulation.Rabbit", 60);
+			simulat.populate("de.futjikato.javahasen.simulation.Rabbit", (App.CREATURE_INIT_MAX_TIGERS/100*this.creatureDensity));
 			
 			Stack<Creature> creatures = simulat.getCreatures();
 			// collect all creatures of the given type

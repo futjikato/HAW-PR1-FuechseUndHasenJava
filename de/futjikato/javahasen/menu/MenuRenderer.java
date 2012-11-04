@@ -1,6 +1,5 @@
 package de.futjikato.javahasen.menu;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 
 import de.futjikato.javahasen.App;
@@ -11,8 +10,6 @@ import de.futjikato.javahasen.ui.UserInterface;
 public class MenuRenderer extends Renderer {
 	
 	private static MenuRenderer instance;
-	
-	private MenuUI ui;
 	
 	private MenuRenderer()  {
 		
@@ -50,15 +47,6 @@ public class MenuRenderer extends Renderer {
 
 	@Override
 	protected UserInterface getUI() {
-		if(this.ui == null) {
-			try {
-				this.ui = new MenuUI();
-			} catch (LWJGLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		return this.ui;
+		return MenuUI.getInstance();
 	}
 }
