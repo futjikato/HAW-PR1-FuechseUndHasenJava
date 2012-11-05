@@ -1,14 +1,18 @@
 package de.futjikato.javahasen.simulation;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.Stack;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
+
 import de.futjikato.javahasen.App;
 import de.futjikato.javahasen.Renderer;
 import de.futjikato.javahasen.RendererException;
-import de.futjikato.javahasen.ui.MenuUI;
 import de.futjikato.javahasen.ui.SimulationUI;
 import de.futjikato.javahasen.ui.UserInterface;
 
@@ -30,9 +34,11 @@ public class SimulationRenderer extends Renderer {
 	private int stepInterval = 100;
 	private static SimulationRenderer instane;
 	
-	private SimulationUI ui;
+	private Texture grassTexture = null;
 	
 	private SimulationRenderer() {
+		
+		
 		
 		// Singleton
 		SimulationRenderer.instane = this;
@@ -102,26 +108,44 @@ public class SimulationRenderer extends Renderer {
 	}
 	
 	public void drawField() {
-		// set field color to some green
-		GL11.glColor3f(0.1f, 0.9f, 0.25f);
 		
 		// move render pencil to 0/0
 		this.moveTo(0, 0);
 		int fieldSize = Simulator.getInstance().getField().getSize();
 		
+		// set field color to some green
+		GL11.glColor3f(1.0f, 1.0f, 1.0f);
+	
+		try {
+			grassTexture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("resources/img/grass.png"));
+			grassTexture.bind();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		GL11.glBegin(GL11.GL_QUADS);
 		
+			GL11.glTexCoord2f(0, 0);
 			GL11.glVertex3f(0, -0.5f, 0); // far left edge
+			
+			GL11.glTexCoord2f(0, 10);
 			GL11.glVertex3f(fieldSize, -0.5f, 0); // near left edge
+			
+			GL11.glTexCoord2f(10, 10);
 			GL11.glVertex3f(fieldSize, -0.5f, fieldSize); // near right edge
+			
+			GL11.glTexCoord2f(10, 0);
 			GL11.glVertex3f(0, -0.5f, fieldSize); // far right edge
 		
 		GL11.glEnd();
+		
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		
 		GL11.glFlush();
 	}
 	
 	public void drawCreature(Creature creature) {
-		
 		// do not draw dead animals
 		if(!creature.isAlive()) {
 			return;
