@@ -119,6 +119,9 @@ public class SimulationRenderer extends Renderer {
 		try {
 			grassTexture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("resources/img/grass.png"));
 			grassTexture.bind();
+			
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,13 +132,13 @@ public class SimulationRenderer extends Renderer {
 			GL11.glTexCoord2f(0, 0);
 			GL11.glVertex3f(0, -0.5f, 0); // far left edge
 			
-			GL11.glTexCoord2f(0, 10);
+			GL11.glTexCoord2f(10, 0);
 			GL11.glVertex3f(fieldSize, -0.5f, 0); // near left edge
 			
 			GL11.glTexCoord2f(10, 10);
 			GL11.glVertex3f(fieldSize, -0.5f, fieldSize); // near right edge
 			
-			GL11.glTexCoord2f(10, 0);
+			GL11.glTexCoord2f(0, 10);
 			GL11.glVertex3f(0, -0.5f, fieldSize); // far right edge
 		
 		GL11.glEnd();
