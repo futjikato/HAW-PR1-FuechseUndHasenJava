@@ -26,7 +26,16 @@ public class App {
 	private int initalTigers = 0;
 	private int initalRabbits = 0;
 	private int fieldsize = 60;
+	private int initalTrees = 0;
 	
+	public int getInitalTrees() {
+		return initalTrees;
+	}
+
+	public void setInitalTrees(int initalTrees) {
+		this.initalTrees = initalTrees;
+	}
+
 	public int getFieldsize() {
 		return fieldsize;
 	}
@@ -150,6 +159,9 @@ public class App {
 			e.printStackTrace();
 			System.out.println("Failed to add rabbits :(");
 		}
+		
+		// grow some trees
+		simulat.growTrees(this.initalTrees);
 		
 		try {
 			// start the simulation

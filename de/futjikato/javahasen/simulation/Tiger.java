@@ -45,7 +45,7 @@ public class Tiger extends Creature {
 	}
 	
 	@Override 
-	protected void eat(Creature foodObj) throws Exception {
+	protected void eat(Fieldobject foodObj) throws Exception {
 		this.foodLevel += 1;
 	}
 	
@@ -53,7 +53,7 @@ public class Tiger extends Creature {
 	public void spawnChild() throws Exception {
 		Stack<Position> neighbor = this.field.getNeighborPositions(this.pos);
 		for(Position n : neighbor) {
-			Creature content = n.getContent();
+			Fieldobject content = n.getContent();
 			if(content != null && content instanceof Tiger) {
 				return;
 			}

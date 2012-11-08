@@ -6,7 +6,7 @@ public class Field {
 	
 	protected int size;
 	
-	protected Creature[][] fielddata;
+	protected Fieldobject[][] fielddata;
 	
 	/** 
 	 * Initialize a new field with the given size
@@ -15,7 +15,7 @@ public class Field {
 	 */
 	public Field(int size) {
 		this.size = size;
-		this.fielddata = new Creature[size][size];
+		this.fielddata = new Fieldobject[size][size];
 	}
 	
 	public int getSize() {
@@ -26,18 +26,18 @@ public class Field {
 		return (pos.getContent().equals(this.fielddata[pos.getNewX()][pos.getNewY()]));
 	}
 	
-	protected void setPosition(Creature creature, Position pos) throws Exception {
+	protected void setPosition(Fieldobject thing, Position pos) throws Exception {
 		// check if field is empty
 		if(this.fielddata[pos.getNewX()][pos.getNewY()] != null) {
 			throw new Exception("Cannot set creature to already filled position");
 		}
 		
-		this.fielddata[pos.getNewX()][pos.getNewY()] = creature;
+		this.fielddata[pos.getNewX()][pos.getNewY()] = thing;
 	}
 	
-	protected void removeCreature(Creature creature, Position pos) throws Exception {
+	protected void remove(Fieldobject thing, Position pos) throws Exception {
 		// check if create is on given position
-		if(this.fielddata[pos.getNewX()][pos.getNewY()] != creature) {
+		if(this.fielddata[pos.getNewX()][pos.getNewY()] != thing) {
 			throw new Exception("Cannot remove creature from position. Wrong position given.");
 		}
 		
@@ -60,9 +60,9 @@ public class Field {
 		return retVal;
 	}
 	
-	protected void moveCreature(int oldX, int oldY, int newX, int newY, Creature content) throws Exception {
+	protected void move(int oldX, int oldY, int newX, int newY, Fieldobject content) throws Exception {
 		// Check if old field is no empty
-		Creature temp = this.fielddata[oldX][oldY];
+		Fieldobject temp = this.fielddata[oldX][oldY];
 		if(temp == null) {
 			throw new Exception("No creature found at old position");
 		}
@@ -73,7 +73,7 @@ public class Field {
 		}
 		
 		// Check that new field is empty
-		Creature atNew = this.fielddata[newX][newY];
+		Fieldobject atNew = this.fielddata[newX][newY];
 		if(atNew != null) {
 			throw new Exception("Target field is not empty");
 		}
@@ -101,18 +101,16 @@ public class Field {
 		// create array for maximum amount of positions
 		Stack<Position> retVal = new Stack<Position>();
 		
-		int index = 0;
 		int x = 0;
-		
-		for (Creature[] inner : this.fielddata) {
-			int y = 0;
+		for (Fieldobject[] inner : this.fielddata) {
 			
-			for (Creature fieldContent : inner) {
+			int y = 0;
+			for (Fieldobject fieldContent : inner) {
 				// collect all free fields
 				if(fieldContent == null) {
 					retVal.push(new Position(x, y, null));
-					index++;
 				}
+				
 				y++;
 			}
 			

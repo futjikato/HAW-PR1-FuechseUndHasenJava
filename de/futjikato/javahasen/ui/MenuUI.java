@@ -34,6 +34,11 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 	public Label fieldsizeValueLabel;
 	public Label fieldsizeLabel;
 	
+	// treedensity scroller
+	public Scrollbar treeDensityScroll;
+	public Label treeDensityValueLabel;
+	public Label treeDensityLabel;
+	
 	private static MenuUI instance;
 	
 	private MenuUI() throws LWJGLException {
@@ -85,7 +90,7 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
         // Tiger Scrollbar
         this.tigerDensityScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
         this.tigerDensityScroll.setMinMaxValue(0, 500);
-        this.tigerDensityScroll.setStepSize(1);
+        this.tigerDensityScroll.setStepSize(5);
         this.tigerDensityScroll.addCallback(new Runnable() {
 			@Override
 			public void run() {
@@ -115,7 +120,7 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
     	// Rabbit Scrollbar
         this.rabbitDensityScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
         this.rabbitDensityScroll.setMinMaxValue(0, 500);
-        this.rabbitDensityScroll.setStepSize(1);
+        this.rabbitDensityScroll.setStepSize(5);
         this.rabbitDensityScroll.addCallback(new Runnable() {
 			@Override
 			public void run() {
@@ -145,7 +150,7 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
     	// fieldsize scroller
         this.fieldsizeScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
         this.fieldsizeScroll.setMinMaxValue(0, 150);
-        this.fieldsizeScroll.setStepSize(1);
+        this.fieldsizeScroll.setStepSize(10);
         this.fieldsizeScroll.addCallback(new Runnable() {
 			@Override
 			public void run() {
@@ -160,17 +165,47 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 		});
         this.add(this.fieldsizeScroll);
         
-        // Rabbit value label
+        // fieldsize label
         this.fieldsizeValueLabel = new Label();
         this.fieldsizeValueLabel.setTheme("valuelabel");
         this.fieldsizeValueLabel.setText("0");
         this.add(this.fieldsizeValueLabel);
         
-        // Rabbit info label
+        // fieldsize label
         this.fieldsizeLabel = new Label();
         this.fieldsizeLabel.setTheme("label");
         this.fieldsizeLabel.setText("Fieldsize:");
-        this.add(this.fieldsizeLabel);        
+        this.add(this.fieldsizeLabel);  
+        
+        // tree scroller
+        this.treeDensityScroll = new Scrollbar(Scrollbar.Orientation.HORIZONTAL);
+        this.treeDensityScroll.setMinMaxValue(0, 50);
+        this.treeDensityScroll.setStepSize(1);
+        this.treeDensityScroll.addCallback(new Runnable() {
+			@Override
+			public void run() {
+				// update ui
+				MenuUI ui = MenuUI.getInstance();
+				int val = ui.treeDensityScroll.getValue();
+				ui.treeDensityValueLabel.setText(Integer.toString(val));
+				
+				// set density in app
+				App.getInstance().setInitalTrees(val);
+			}
+		});
+        this.add(this.treeDensityScroll);
+        
+        // tree label
+        this.treeDensityValueLabel = new Label();
+        this.treeDensityValueLabel.setTheme("valuelabel");
+        this.treeDensityValueLabel.setText("0");
+        this.add(this.treeDensityValueLabel);
+        
+        // tree label
+        this.treeDensityLabel = new Label();
+        this.treeDensityLabel.setTheme("label");
+        this.treeDensityLabel.setText("Trees:");
+        this.add(this.treeDensityLabel);  
 	}
 	
 	@Override
@@ -214,6 +249,18 @@ public class MenuUI extends Widget implements UserInterface, Runnable  {
 		// fieldsize value label
 		this.fieldsizeValueLabel.setPosition(460, 100);
 		this.fieldsizeValueLabel.adjustSize();
+		
+		// tree density scroller
+		this.treeDensityScroll.setPosition(260, 180);
+		this.treeDensityScroll.adjustSize();
+				
+		// tree density label
+		this.treeDensityLabel.setPosition(260, 160);
+		this.treeDensityLabel.adjustSize();
+		
+		// tree density value label
+		this.treeDensityValueLabel.setPosition(460, 180);
+		this.treeDensityValueLabel.adjustSize();
 	}
 
 	public void update() {

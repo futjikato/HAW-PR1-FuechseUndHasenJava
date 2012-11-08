@@ -3,7 +3,7 @@ package de.futjikato.javahasen.simulation;
 import java.util.Collections;
 import java.util.Stack;
 
-public abstract class Creature {
+public abstract class Creature extends Fieldobject {
 	
 	protected boolean alive = true;
 	
@@ -43,7 +43,7 @@ public abstract class Creature {
 		
 		this.age++;
 		if(this.age > this.getMaxAge()) {
-			this.die();
+			this.delete();
 			return false;
 		}
 		
@@ -70,14 +70,14 @@ public abstract class Creature {
 				}
 				
 				for(Class eatClass : food) {
-					Creature eatCreature = testPos.getContent();
+					Fieldobject eatCreature = testPos.getContent();
 					if(eatCreature.getClass().equals(eatClass)) {
 						// move to food source
 						newPos = eatCreature.getPosition();
 						// consume
 						this.eat(eatCreature);
 						// remove eaten one from field
-						eatCreature.die();
+						eatCreature.delete();
 						
 						// break eating loop
 						break eatloop;
@@ -89,7 +89,7 @@ public abstract class Creature {
 			}
 			
 			if(this.foodLevel <= 0) {
-				this.die();
+				this.delete();
 				return false;
 			}
 		}
@@ -99,7 +99,7 @@ public abstract class Creature {
 			Stack<Position> freeNei = this.field.getFreeNeightbors(this.pos);
 			
 			if(freeNei.empty()) {
-				this.die();
+				this.delete();
 				return false;
 			}
 			
@@ -122,13 +122,13 @@ public abstract class Creature {
 	protected abstract int getInitFoodLevel();
 	public abstract String getFieldCodeChar();
 	
-	protected void eat(Creature foodObj) throws Exception {
+	protected void eat(Fieldobject foodObj) throws Exception {
 		// do nothing on default
 	}
 	
-	public void die() throws Exception {
+	public void delete() throws Exception {
 		this.alive = false;
-		this.field.removeCreature(this, this.pos);
+		super.delete();
 	}
 	
 	public boolean isAlive() {

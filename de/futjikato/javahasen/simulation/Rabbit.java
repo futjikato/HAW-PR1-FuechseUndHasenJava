@@ -59,8 +59,11 @@ public class Rabbit extends Creature {
 			while(!neighborPositions.empty()) {
 				Position testPos = neighborPositions.pop();
 				
-				if(!testPos.isEmpty() && testPos.getContent() instanceof Rabbit && testPos.getContent().getAge() > 3) {
-					rabbitCount++;
+				if(!testPos.isEmpty() && testPos.getContent() instanceof Rabbit) {
+					Rabbit rabbit = (Rabbit)testPos.getContent();
+					if(rabbit.getAge() > 3) {
+						rabbitCount++;
+					}
 				}
 			}
 			
@@ -108,7 +111,7 @@ public class Rabbit extends Creature {
 		Stack<Position> neighbor = this.field.getNeighborPositions(this.pos);
 		while(!neighbor.empty()) {
 			Position n = neighbor.pop();
-			Creature content = n.getContent();
+			Fieldobject content = n.getContent();
 			if(content != null && content instanceof Tiger) {
 				return;
 			}

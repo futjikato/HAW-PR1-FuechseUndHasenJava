@@ -223,6 +223,19 @@ public class SimulationRenderer extends Renderer {
 		// draw everything on the field
 		this.drawCreatures(creatures);
 		
+		// gett all static objects
+		@SuppressWarnings("unchecked")
+		Stack<StaticObject> objStack = (Stack<StaticObject>) sim.getAllObjects().clone();
+		while(!objStack.empty()) {
+			StaticObject obj = objStack.pop();
+			
+			// get position
+			Position pos = obj.getPosition();
+			this.moveTo(pos.getNewX(), pos.getNewY());
+			
+			obj.render();
+		}
+		
 		// move viewport/camera
 		this.camera_x = this.input.handleCameraX(this.camera_x);
 		this.camera_y = this.input.handleCameraY(this.camera_y);

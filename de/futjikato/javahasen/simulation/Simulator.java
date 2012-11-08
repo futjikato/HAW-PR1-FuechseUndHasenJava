@@ -9,6 +9,8 @@ public class Simulator {
 	
 	private Stack<Class<Creature>> existingCreatureClasses = new Stack<Class<Creature>>();
 	
+	private Stack<StaticObject> objects = new Stack<StaticObject>();
+	
 	private int simulationCreatureIndex = 0;
 	
 	protected Field battlefield;
@@ -92,6 +94,35 @@ public class Simulator {
 		}
 		
 		return true;
+	}
+	
+	public void growTrees(int amount) {
+		
+		Stack<Position> freeList = this.battlefield.getAllFreePositions();
+		Collections.shuffle(freeList);
+		
+		maingrowloop:
+		for(int i = 0 ; i < amount ; i++) {
+			Position pos = null;
+			do {
+				// check if free position exist
+				if(freeList.empty()) break maingrowloop;
+				
+				// pop off one free position
+				pos = freeList.pop();
+			} while(pos.isBorder());
+			
+			try {
+				Tree newTree = new Tree(pos);
+				this.objects.push(newTree);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public Stack<StaticObject> getAllObjects() {
+		return this.objects;
 	}
 	
 	public boolean populate(String baseClass, int number) {

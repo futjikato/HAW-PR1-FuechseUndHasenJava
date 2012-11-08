@@ -7,9 +7,9 @@ public class Position {
 	private int endX;
 	private int endY;
 	
-	private Creature content;
+	private Fieldobject content;
 	
-	public Position(int x, int y, Creature content) {
+	public Position(int x, int y, Fieldobject content) {
 		this.x = x;
 		this.endX = x;
 		
@@ -40,7 +40,7 @@ public class Position {
 		this.reachedNewPosition();
 		
 		// inform field
-		Simulator.getInstance().getField().moveCreature(this.endX, this.endY, x, y, this.content);
+		Simulator.getInstance().getField().move(this.endX, this.endY, x, y, this.content);
 		
 		// set new destination
 		this.endX = x;
@@ -57,16 +57,24 @@ public class Position {
 		return this;
 	}
 	
-	public Creature getContent() {
+	public Fieldobject getContent() {
 		return this.content;
 	}
 	
-	public Position setContent(Creature content) throws Exception {
+	public boolean isCreature() {
+		return !this.isEmpty() && this.content instanceof Creature;
+	}
+	
+	public boolean isStatic() {
+		return !this.isEmpty() && this.content instanceof StaticObject;
+	}
+	
+	public Position setContent(Fieldobject content) throws Exception {
 		Field field = Simulator.getInstance().getField();
 		
 		// may remove old content from field
 		if(this.content != null) {
-			field.removeCreature(this.content, this);
+			field.remove(this.content, this);
 		}
 		
 		this.content = content;
@@ -94,5 +102,17 @@ public class Position {
 		if(!field.verify(this)) {
 			throw new Exception("Invalid position");
 		}
+	}
+
+	public boolean isBorder() {
+		Field field = Simulator.getInstance().getField();
+		int size = field.getSize();
+		
+		return (
+			this.endX == (size - 1) || 
+			this.endX == 0 || 
+			this.endY == (size - 1) || 
+			this.endY == 0
+		);
 	}
 }
